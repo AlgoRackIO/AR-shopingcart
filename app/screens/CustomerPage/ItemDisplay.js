@@ -14,13 +14,17 @@ import RadioForm from "react-native-simple-radio-button";
 import InputSpinner from "react-native-input-spinner";
 import { useDispatch, connect } from "react-redux";
 import { SliderBox } from "react-native-image-slider-box";
+import AsyncStorage from "@react-native-community/async-storage";
 
 function ItemDisplay({ route }) {
   const id = route.params.id;
   const dispatch = useDispatch();
   const [finalPrice, setFinalPrice] = useState(0);
-  const [itemPrice, setItemPrice] = useState(data[id].types[0].value);
+  const [itemPrice, setItemPrice] = useState(
+    mainData[id].itemTypes[0].varientTypes[0].price
+  );
   const [itemQuantity, setItemQuantity] = useState(1);
+  const [mainData, setMainData] = useState([]);
 
   const addItemstCard = (items) => {
     dispatch({ type: ADD_TO_CART, payload: items });
@@ -30,7 +34,7 @@ function ItemDisplay({ route }) {
     dispatch({ type: CHANGE_ITEM_QUANTITY, payload: item });
   };
 
-  const showAlert = (items) =>
+  const showAlert = (items) => {
     Alert.alert(
       "Kindly confirm your order",
       "press confirm button to add item",
@@ -49,6 +53,13 @@ function ItemDisplay({ route }) {
         },
       ]
     );
+  };
+
+  useEffect(() => {
+    AsyncStorage.getItem("data", (err, result) => {
+      setMainData(JSON.parse(result));
+    });
+  }, []);
 
   return (
     <View>
@@ -56,15 +67,15 @@ function ItemDisplay({ route }) {
         <Card>
           <View>
             <SliderBox
-              images={data[id].imgURL}
+              images={mainData[id].imgURL}
               sliderBoxHeight={400}
               parentWidth={330}
               resizeMode="contain"
               autoplay
               circleLoop
             />
-            <Text style={styles.itemPrice}>Rs: {data[id].types[0].value}</Text>
-            <Text style={styles.itemTitle}>{data[id].name}</Text>
+            <Text style={styles.itemPrice}>Rs: {itemPrice}</Text>
+            <Text style={styles.itemTitle}>{mainData[id].name}</Text>
             <View>
               <Text
                 style={{
@@ -75,13 +86,13 @@ function ItemDisplay({ route }) {
               >
                 Description:
               </Text>
-              <Text>{data[id].description}</Text>
+              <Text>{mainData[id].description}</Text>
             </View>
           </View>
           <View>
-            <Text style={styles.textheadings}>Select Book type</Text>
+            <Text style={styles.textheadings}>Select type</Text>
             <RadioForm
-              radio_props={data[id].types}
+              radio_props={mainData[id].itemTypes[0].varientTypes}
               // initial={0}
               formHorizontal={false}
               labelHorizontal={true}

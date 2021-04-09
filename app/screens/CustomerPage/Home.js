@@ -15,10 +15,16 @@ import { data } from "../../data/data";
 import { useDispatch, connect } from "react-redux";
 import { ADD_TO_CART } from "../../redux/CartItem";
 import ModalDropdown from "react-native-modal-dropdown";
+import AsyncStorage from "@react-native-community/async-storage";
 
 const Home = (props) => {
+  AsyncStorage.setItem("data", JSON.stringify(data));
+
   const navigation = props.navigation;
-  const itemsData = data;
+  const [itemsData, setItemData] = useState([]);
+  AsyncStorage.getItem("data", (err, result) => {
+    setItemData(JSON.parse(result));
+  });
   const state = props.state;
   const dispatch = useDispatch();
 
@@ -130,7 +136,7 @@ const Home = (props) => {
                         Name: {item.name}
                       </Text>
                       <Text style={styles.itemPrice}>
-                        Rs: {item.types[0].value}
+                        Rs: {item.itemTypes[0].varientTypes[0].price}
                       </Text>
                     </View>
                   </View>
