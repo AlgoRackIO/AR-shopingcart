@@ -16,7 +16,7 @@ const item_data = {
   id: data.length,
   name: "",
   description: "",
-  imgURL: "",
+  imgURL: ["1", "2", "3", "4"],
   itemTypes: [
     {
       typeID: 0,
@@ -35,7 +35,7 @@ const AddItem = ({ navigation }) => {
 
   const getdata = (data) => {
     setMainData(data.mainData);
-    navigation.navigate("FileAdd");
+    navigation.navigate("FileAdd", { mainData: mainData });
   };
 
   const setNameAndDesc = (data) => {
@@ -144,6 +144,9 @@ const GetInputField = (props) => {
   const [onDetailsPage, SetOnDetailsPage] = useState(props.onDetailsPage);
   const [imgURL, setImgURl] = useState(props.imgURL);
 
+  useEffect(() => {
+    console.log(imgURL);
+  }, [imgURL]);
   const goTypePage = () => {
     if (name && description && imgURL) {
       SetOnDetailsPage(true);
@@ -152,10 +155,11 @@ const GetInputField = (props) => {
       Alert.alert("Kindly Fill Each box!");
     }
   };
+  // console.log(imgURL);
 
   return (
     <View style={styles.inputNameMView}>
-      <Text style={styles.headText}>Kindly Fill Item Details</Text>
+      <Text style={styles.headText}>Kindly fill product details</Text>
       <View style={styles.inputNameBoxView}>
         <TextInput
           key="Name"
@@ -165,19 +169,53 @@ const GetInputField = (props) => {
           onChangeText={setName}
         />
         <TextInput
-          key="ImgURL"
-          style={styles.inputNameDes}
-          placeholder="Img URl"
-          value={imgURL}
-          onChangeText={setImgURl}
-        />
-        <TextInput
           key="description"
           style={[styles.inputNameDes, { height: 70 }]}
           placeholder="description"
           value={description}
           onChangeText={(text) => SetDescription(text)}
         />
+        {imgURL.map((image, key) => {
+          return (
+            <View
+              key={key}
+              style={{
+                width: "91%",
+                flex: 1,
+                flexDirection: "row",
+                marginLeft: 38,
+                // alignItems: "center",
+              }}
+            >
+              <TextInput
+                key="ImgURL"
+                style={styles.inputNameDes}
+                placeholder="Img URl"
+                value={imgURL}
+                onChangeText={(text) => (image = text)}
+              />
+              {key == 0 ? (
+                <ButtonElement
+                  icon={<Icon name="plus" size={20} color="red" type="clear" />}
+                  // onPress={() => props.addNewSubType(index.typeID)}
+                  type="clear"
+                />
+              ) : null}
+              {key == imgURL.length - 1 && key > 0 ? (
+                <ButtonElement
+                  key={key}
+                  icon={
+                    <Icon name="times" size={20} color="red" type="clear" />
+                  }
+                  // onPress={() =>
+                  //   props.deleteSubType(index.typeID, varient.subID)
+                  // }
+                  type="clear"
+                />
+              ) : null}
+            </View>
+          );
+        })}
         <View style={styles.inputNameNextB}>
           <Button title="Next" color="red" onPress={goTypePage} />
         </View>
@@ -199,88 +237,92 @@ const GetItemTypes = (props) => {
   return (
     <View>
       <Text style={styles.typeHeading}>Add items itemTypes</Text>
-      {mainData.itemTypes.map((index, key) => (
-        <View style={styles.typeBox} key={key}>
-          <View>
-            {mainData.itemTypes.length > 1 &&
-            index.typeID == mainData.itemTypes.length - 1 ? (
-              <View style={styles.typeBoxDlt}>
-                <ButtonElement
-                  key={key}
-                  icon={
-                    <Icon name="times" size={20} color="red" type="clear" />
-                  }
-                  onPress={() => props.onDeleteType(index.typeID)}
-                  type="clear"
-                />
-              </View>
-            ) : null}
+      {mainData.itemTypes.map((index, key) => {
+        return (
+          <View style={styles.typeBox} key={key}>
             <View>
-              <Text style={styles.typesStyle}>Type {key + 1}</Text>
-            </View>
-            <View style={styles.typeNameBox}>
-              <TextInput
-                key="typeName"
-                style={styles.typeInputBox}
-                placeholder={" Name"}
-                onChangeText={(text) => (index.varientName = text)}
-              />
-            </View>
-            <View>
-              {index.varientTypes.map((varient, key1) => (
-                <View style={styles.typeLabelPriceView} key={key1}>
-                  <TextInput
-                    key="typeLabel"
-                    style={styles.typeInputBox}
-                    placeholder={("Type", key1, "Label")}
-                    onChangeText={(text) => (varient.name = text)}
-                  />
-                  <TextInput
-                    key="typePrice"
-                    style={styles.typeInputBox}
-                    placeholder="Price"
-                    keyboardType="number-pad"
-                    onChangeText={(text) => (varient.price = +text)}
-                  />
-
-                  {index.varientTypes.length > 1 &&
-                  varient.subID == index.varientTypes.length - 1 ? (
-                    <View style={styles.typeBoxDlt}>
-                      <ButtonElement
-                        key={key}
-                        icon={
-                          <Icon
-                            name="times"
-                            size={20}
-                            color="red"
-                            type="clear"
-                          />
-                        }
-                        onPress={() =>
-                          props.deleteSubType(index.typeID, varient.subID)
-                        }
-                        type="clear"
-                      />
-                    </View>
-                  ) : null}
-                </View>
-              ))}
-
-              <View style={styles.typeSubBView}>
-                <View style={styles.typeSubBView2}>
+              {mainData.itemTypes.length > 1 &&
+              index.typeID == mainData.itemTypes.length - 1 ? (
+                <View style={styles.typeBoxDlt}>
                   <ButtonElement
+                    key={key}
                     icon={
-                      <Icon name="plus" size={15} color="red" type="clear" />
+                      <Icon name="times" size={20} color="red" type="clear" />
                     }
-                    onPress={() => props.addNewSubType(index.typeID)}
+                    onPress={() => props.onDeleteType(index.typeID)}
                     type="clear"
                   />
+                </View>
+              ) : null}
+              <View>
+                <Text style={styles.typesStyle}>Type {key + 1}</Text>
+              </View>
+              <View style={styles.typeNameBox}>
+                <TextInput
+                  key="typeName"
+                  style={styles.typeInputBox}
+                  placeholder={" Name"}
+                  onChangeText={(text) => (index.varientName = text)}
+                />
+              </View>
+              <View>
+                {index.varientTypes.map((varient, key1) => {
+                  return (
+                    <View style={styles.typeLabelPriceView} key={key1}>
+                      <TextInput
+                        key="typeLabel"
+                        style={styles.typeInputBox}
+                        placeholder={("Type", key1, "Label")}
+                        onChangeText={(text) => (varient.name = text)}
+                      />
+                      <TextInput
+                        key="typePrice"
+                        style={styles.typeInputBox}
+                        placeholder="Price"
+                        keyboardType="number-pad"
+                        onChangeText={(text) => (varient.price = +text)}
+                      />
+
+                      {index.varientTypes.length > 1 &&
+                      varient.subID == index.varientTypes.length - 1 ? (
+                        <View style={styles.typeBoxDlt}>
+                          <ButtonElement
+                            key={key}
+                            icon={
+                              <Icon
+                                name="times"
+                                size={20}
+                                color="red"
+                                type="clear"
+                              />
+                            }
+                            onPress={() =>
+                              props.deleteSubType(index.typeID, varient.subID)
+                            }
+                            type="clear"
+                          />
+                        </View>
+                      ) : null}
+                    </View>
+                  );
+                })}
+
+                <View style={styles.typeSubBView}>
+                  <View style={styles.typeSubBView2}>
+                    <ButtonElement
+                      icon={
+                        <Icon name="plus" size={15} color="red" type="clear" />
+                      }
+                      onPress={() => props.addNewSubType(index.typeID)}
+                      type="clear"
+                    />
+                  </View>
                 </View>
               </View>
             </View>
           </View>
-        </View>
-      ))}
+        );
+      })}
       <View
         style={{
           flex: 0,

@@ -11,12 +11,13 @@ import {
   TouchableOpacity,
 } from "react-native";
 
-const SignUpScreen = ({ navigation }) => {
+const SignUpScreen = (props) => {
   const [fName, setFName] = useState("");
   const [lName, setLName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [emailValidation, SetEmailValidation] = useState(true);
+  const user = props.route.params.user;
 
   const handleSignUp = () => {
     if (emailValidation) {
@@ -49,7 +50,7 @@ const SignUpScreen = ({ navigation }) => {
   };
 
   const SignIn = () => {
-    navigation.navigate("SignIn");
+    props.navigation.navigate("SignIn", { user: user });
   };
 
   return (

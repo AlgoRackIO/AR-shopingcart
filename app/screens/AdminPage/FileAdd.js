@@ -11,7 +11,9 @@ import {
 import { data } from "../../data/data";
 import { SliderBox } from "react-native-image-slider-box";
 
-const FileAdd = () => {
+const FileAdd = (props) => {
+  const mainData = props.route.params.mainData;
+
   const id = 0;
   return (
     <View>
@@ -26,8 +28,10 @@ const FileAdd = () => {
               autoplay
               circleLoop
             />
-            <Text style={styles.itemPrice}>Rs: {data[id].types[0].value}</Text>
-            <Text style={styles.itemTitle}>{data[id].name}</Text>
+            <Text style={styles.itemPrice}>
+              Rs: {mainData.itemTypes[0].varientTypes[0].price}
+            </Text>
+            <Text style={styles.itemTitle}>{mainData.name}</Text>
             <View>
               <Text
                 style={{
@@ -38,55 +42,44 @@ const FileAdd = () => {
               >
                 Description:
               </Text>
-              <Text>{data[id].description}</Text>
+              <Text>{mainData.description}</Text>
             </View>
           </View>
           <View>
-            <Text style={styles.textheadings}>Select Book type</Text>
-            {/* <RadioForm
-            radio_props={data[id].types}
-            // initial={0}
-            formHorizontal={false}
-            labelHorizontal={true}
-            buttonColor={"red"}
-            buttonInnerColor={"red"}
-            buttonOuterColor={"red"}
-            buttonSize={10}
-            animation={true}
-            onPress={(value) => setItemPrice(value)}
-            style={{ marginTop: 10 }}
-          /> */}
-
-            {/* <InputSpinner
-            max={10}
-            min={1}
-            step={1}
-            color={"#f74444"}
-            value={1}
-            onChange={(num) => {
-              setItemQuantity(num);
-            }}
-            style={{ marginTop: 30 }}
-          /> */}
+            <Text style={styles.textheadings}>Categories</Text>
+            <View>
+              {mainData.itemTypes.map((index, key) => {
+                return (
+                  <Card>
+                    <View key={key}>
+                      <Text
+                        style={{
+                          color: "red",
+                          fontSize: 20,
+                        }}
+                      >
+                        {index.varientName}
+                      </Text>
+                      <View>
+                        {index.varientTypes.map((varient, varientKey) => {
+                          return (
+                            <View key={varientKey}>
+                              <Text>
+                                <Text>
+                                  {varient.name} (Rs.{varient.price})
+                                </Text>
+                              </Text>
+                            </View>
+                          );
+                        })}
+                      </View>
+                    </View>
+                  </Card>
+                );
+              })}
+            </View>
           </View>
-          <Text style={styles.textheadings}>
-            Final Price:
-            {/* {itemQuantity * itemPrice}{" "} */}
-          </Text>
-          <View style={styles.rigthHeaderButtons}>
-            {/* <Button
-              color="#f74444"
-              title="Add to Card"
-              // onPress={() =>
-              //   showAlert({
-              //     id: id,
-              //     name: data[id].name,
-              //     price: itemPrice,
-              //     quantity: itemQuantity,
-              //   })
-              // }
-            /> */}
-          </View>
+          <View style={styles.rigthHeaderButtons}></View>
         </Card>
       </ScrollView>
     </View>

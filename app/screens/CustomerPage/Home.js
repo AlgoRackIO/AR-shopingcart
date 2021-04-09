@@ -66,7 +66,7 @@ const Home = (props) => {
             }
             title="logout"
           />
-          <ModalDropdown options={["option 1", "option 2"]} />
+          {/* <ModalDropdown options={["option 1", "option 2"]} /> */}
         </View>
       ),
     });

@@ -49,7 +49,7 @@ const SignInScreen = (props) => {
   };
 
   const SignUp = () => {
-    props.navigation.navigate("SignUp");
+    props.navigation.navigate("SignUp", { user: user });
   };
 
   return (
@@ -136,13 +136,14 @@ const styles = StyleSheet.create({
   },
   button: {
     top: 20,
-    width: "40%",
+    width: "50%",
   },
   signUpLink: {
     color: "red",
     fontWeight: "bold",
     fontSize: 15,
     marginTop: 10,
+    width: "130%",
   },
 });
 

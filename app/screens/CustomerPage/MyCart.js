@@ -35,7 +35,7 @@ const MyCart = (Props) => {
   };
 
   useLayoutEffect(() => {
-    state.map((item) => {
+    state.forEach((item) => {
       const tempPay = item.quantity * item.price;
       setTotalPayment(tempPay);
     });
