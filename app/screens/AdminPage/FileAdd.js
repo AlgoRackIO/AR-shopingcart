@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useLayoutEffect } from "react";
 import { Card } from "react-native-elements";
 import {
   View,
@@ -9,19 +9,41 @@ import {
   Alert,
 } from "react-native";
 import { data } from "../../data/data";
+import { Button as ButtonElement } from "react-native-elements";
 import { SliderBox } from "react-native-image-slider-box";
 
 const FileAdd = (props) => {
   const mainData = props.route.params.mainData;
+  const navigation = props.navigation;
 
-  const id = 0;
+  console.log(mainData.id);
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <View>
+          <View style={{ width: 15, top: 40 }}></View>
+          <Button
+            color="#f74444"
+            onPress={() =>
+              navigation.reset({
+                index: 0,
+                routes: [{ name: "ViewItems" }],
+              })
+            }
+            title="View Data"
+          />
+          {/* <ModalDropdown options={["option 1", "option 2"]} /> */}
+        </View>
+      ),
+    });
+  }, []);
   return (
     <View>
       <ScrollView>
         <Card>
           <View>
             <SliderBox
-              images={data[id].imgURL}
+              images={mainData.imgURL}
               sliderBoxHeight={400}
               parentWidth={330}
               resizeMode="contain"
@@ -50,8 +72,8 @@ const FileAdd = (props) => {
             <View>
               {mainData.itemTypes.map((index, key) => {
                 return (
-                  <Card>
-                    <View key={key}>
+                  <Card key={key}>
+                    <View>
                       <Text
                         style={{
                           color: "red",

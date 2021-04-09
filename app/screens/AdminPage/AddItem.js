@@ -11,12 +11,13 @@ import {
 import Icon from "react-native-vector-icons/FontAwesome";
 import { Button as ButtonElement } from "react-native-elements";
 import { data } from "../../data/data";
+import AsyncStorage from "@react-native-community/async-storage";
 
 const item_data = {
-  id: data.length,
+  id: 0,
   name: "",
   description: "",
-  imgURL: ["1", "2", "3", "4"],
+  imgURL: [""],
   itemTypes: [
     {
       typeID: 0,
@@ -28,7 +29,9 @@ const item_data = {
 
 const AddItem = ({ navigation }) => {
   const [onDetailsPage, SetOnDetailsPage] = useState(true);
+  const [itemsData, setItemData] = useState([]);
   const [mainData, setMainData] = useState(item_data);
+
   const backinputField = () => {
     SetOnDetailsPage(true);
   };
@@ -106,6 +109,32 @@ const AddItem = ({ navigation }) => {
     });
   };
 
+  const addImg = () => {
+    setMainData({
+      ...mainData,
+      imgURL: [...mainData.imgURL, ""],
+    });
+  };
+
+  const deleteImg = () => {
+    setMainData({
+      ...mainData,
+      imgURL: mainData.imgURL.filter(
+        (index, i) => i != mainData.imgURL.length - 1
+      ),
+    });
+  };
+
+  useEffect(() => {
+    AsyncStorage.getItem("data", (err, result) => {
+      setItemData(JSON.parse(result));
+    });
+    setMainData({
+      ...mainData,
+      id: itemsData.length,
+    });
+  }, []);
+
   return (
     <View style={styles.mainView}>
       <ScrollView>
@@ -117,6 +146,8 @@ const AddItem = ({ navigation }) => {
             imgURL={mainData.imgURL}
             onDetailsPage={onDetailsPage}
             mainData={mainData}
+            addImg={addImg}
+            deleteImg={deleteImg}
           />
         ) : (
           <View>
@@ -129,7 +160,6 @@ const AddItem = ({ navigation }) => {
               backinputField={backinputField}
               deleteSubType={deleteSubType}
               getdata={getdata}
-              mainData={mainData}
             />
           </View>
         )}
@@ -144,18 +174,22 @@ const GetInputField = (props) => {
   const [onDetailsPage, SetOnDetailsPage] = useState(props.onDetailsPage);
   const [imgURL, setImgURl] = useState(props.imgURL);
 
-  useEffect(() => {
-    console.log(imgURL);
-  }, [imgURL]);
   const goTypePage = () => {
-    if (name && description && imgURL) {
+    let checkImg = true;
+    imgURL.forEach((img) => {
+      if (img === "") checkImg = false;
+    });
+    if (name && description && checkImg) {
       SetOnDetailsPage(true);
       props.onSave({ name, description, onDetailsPage, imgURL });
     } else {
       Alert.alert("Kindly Fill Each box!");
     }
   };
-  // console.log(imgURL);
+
+  useEffect(() => {
+    setImgURl(props.imgURL);
+  }, [props.imgURL]);
 
   return (
     <View style={styles.inputNameMView}>
@@ -173,9 +207,9 @@ const GetInputField = (props) => {
           style={[styles.inputNameDes, { height: 70 }]}
           placeholder="description"
           value={description}
-          onChangeText={(text) => SetDescription(text)}
+          onChangeText={SetDescription}
         />
-        {imgURL.map((image, key) => {
+        {imgURL.map((img, key) => {
           return (
             <View
               key={key}
@@ -184,32 +218,27 @@ const GetInputField = (props) => {
                 flex: 1,
                 flexDirection: "row",
                 marginLeft: 38,
-                // alignItems: "center",
               }}
             >
               <TextInput
-                key="ImgURL"
                 style={styles.inputNameDes}
                 placeholder="Img URl"
-                value={imgURL}
-                onChangeText={(text) => (image = text)}
+                // value={imgURL[key]}
+                onChangeText={(text) => (imgURL[key] = text)}
               />
               {key == 0 ? (
                 <ButtonElement
                   icon={<Icon name="plus" size={20} color="red" type="clear" />}
-                  // onPress={() => props.addNewSubType(index.typeID)}
+                  onPress={props.addImg}
                   type="clear"
                 />
               ) : null}
               {key == imgURL.length - 1 && key > 0 ? (
                 <ButtonElement
-                  key={key}
                   icon={
                     <Icon name="times" size={20} color="red" type="clear" />
                   }
-                  // onPress={() =>
-                  //   props.deleteSubType(index.typeID, varient.subID)
-                  // }
+                  onPress={props.deleteImg}
                   type="clear"
                 />
               ) : null}
@@ -261,7 +290,7 @@ const GetItemTypes = (props) => {
                 <TextInput
                   key="typeName"
                   style={styles.typeInputBox}
-                  placeholder={" Name"}
+                  placeholder={"Name"}
                   onChangeText={(text) => (index.varientName = text)}
                 />
               </View>

@@ -14,7 +14,6 @@ import Admin from "./app/screens/AdminPage/Admin";
 import ViewItems from "./app/screens/AdminPage/ViewItems";
 import EditItems from "./app/screens/AdminPage/EditItems";
 import AddItem from "./app/screens/AdminPage/AddItem";
-import AddItemTemp from "./app/screens/AdminPage/AddItemTemp";
 import FileAdd from "./app/screens/AdminPage/FileAdd";
 
 export default function App({ navigation }) {
@@ -33,7 +32,6 @@ export default function App({ navigation }) {
           <Stack.Screen name="ViewItems" component={ViewItems} />
           <Stack.Screen name="EditItems" component={EditItems} />
           <Stack.Screen name="AddItem" component={AddItem} />
-          <Stack.Screen name="AddItemTemp" component={AddItemTemp} />
           <Stack.Screen
             name="FileAdd"
             component={FileAdd}
