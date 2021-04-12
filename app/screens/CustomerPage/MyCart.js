@@ -31,6 +31,7 @@ const MyCart = (Props) => {
   };
 
   const changeItemQuantity = (item) => {
+    console.log(item.id);
     dispatch({ type: CHANGE_ITEM_QUANTITY, payload: item });
   };
 
@@ -65,7 +66,7 @@ const MyCart = (Props) => {
                       value={item.quantity}
                       onChange={(num) => {
                         changeItemQuantity({
-                          id: item.id,
+                          id: key,
                           name: item.name,
                           price: item.price,
                           quantity: num,

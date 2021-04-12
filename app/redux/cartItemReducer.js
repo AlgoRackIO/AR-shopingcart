@@ -12,24 +12,25 @@ const cartItemsReducer = (state = initialState, action) => {
       return [
         ...state,
         {
-          id: action.payload.id,
+          id: state.length,
           name: action.payload.name,
           price: action.payload.price,
           quantity: action.payload.quantity,
         },
       ];
-    // }
 
     case REMOVE_FROM_CART:
       return state.filter((cartItem) => cartItem.id !== action.payload);
 
     case CHANGE_ITEM_QUANTITY:
       var index = state.findIndex((index) => index.id == action.payload.id);
+      console.log(index, state[index]);
       state[index] = {
+        ...state[index],
         id: action.payload.id,
-        name: action.payload.name,
-        price: action.payload.price,
         quantity: action.payload.quantity,
+        // name: action.payload.name,
+        // price: action.payload.price,
       };
       return [...state];
   }
