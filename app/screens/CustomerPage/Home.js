@@ -136,7 +136,7 @@ const Home = (props) => {
                         Name: {item.name}
                       </Text>
                       <Text style={styles.itemPrice}>
-                        Rs: {item.itemTypes[0].varientTypes[0].price}
+                        Rs: {item.itemTypes[0].varientTypes[0].value}
                       </Text>
                     </View>
                   </View>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Card } from "react-native-elements";
 import {
   View,
@@ -19,19 +19,34 @@ import AsyncStorage from "@react-native-community/async-storage";
 function ItemDisplay({ route }) {
   const id = route.params.id;
   const dispatch = useDispatch();
-  const [finalPrice, setFinalPrice] = useState(0);
+  const [mainData, setMainData] = useState(data);
+  const [priceList, setPriceList] = useState(
+    mainData[id].itemTypes.map((index) => {
+      return index.varientTypes[0].value;
+    })
+  );
   const [itemPrice, setItemPrice] = useState(
-    mainData[id].itemTypes[0].varientTypes[0].price
+    priceList.reduce((a, b) => a + b, 0)
   );
   const [itemQuantity, setItemQuantity] = useState(1);
-  const [mainData, setMainData] = useState([]);
-
   const addItemstCard = (items) => {
     dispatch({ type: ADD_TO_CART, payload: items });
   };
 
-  const changeItemQuantity = (...item) => {
+  const changeItemQuantity = (item) => {
+    setItemQuantity(item);
     dispatch({ type: CHANGE_ITEM_QUANTITY, payload: item });
+  };
+
+  const addPriceList = (id, price) => {
+    setPriceList(
+      priceList.map((index, key) => {
+        if (key == id) {
+          return price;
+        }
+        return index;
+      })
+    );
   };
 
   const showAlert = (items) => {
@@ -54,6 +69,9 @@ function ItemDisplay({ route }) {
       ]
     );
   };
+  useEffect(() => {
+    setItemPrice(priceList.reduce((a, b) => a + b, 0));
+  }, [priceList]);
 
   useEffect(() => {
     AsyncStorage.getItem("data", (err, result) => {
@@ -90,20 +108,28 @@ function ItemDisplay({ route }) {
             </View>
           </View>
           <View>
-            <Text style={styles.textheadings}>Select type</Text>
-            <RadioForm
-              radio_props={mainData[id].itemTypes[0].varientTypes}
-              // initial={0}
-              formHorizontal={false}
-              labelHorizontal={true}
-              buttonColor={"red"}
-              buttonInnerColor={"red"}
-              buttonOuterColor={"red"}
-              buttonSize={10}
-              animation={true}
-              onPress={(value) => setItemPrice(value)}
-              style={{ marginTop: 10 }}
-            />
+            {mainData[id].itemTypes.map((type, key) => {
+              return (
+                <View key={key}>
+                  <Text style={styles.textheadings}>
+                    Select {type.varientName} type
+                  </Text>
+                  <RadioForm
+                    radio_props={type.varientTypes}
+                    // initial={0}
+                    formHorizontal={false}
+                    labelHorizontal={true}
+                    buttonColor={"red"}
+                    buttonInnerColor={"red"}
+                    buttonOuterColor={"red"}
+                    buttonSize={10}
+                    animation={true}
+                    onPress={(value) => addPriceList(key, value)}
+                    style={{ marginTop: 10 }}
+                  />
+                </View>
+              );
+            })}
 
             <InputSpinner
               max={10}
@@ -112,14 +138,13 @@ function ItemDisplay({ route }) {
               color={"#f74444"}
               value={1}
               onChange={(num) => {
-                setItemQuantity(num);
+                changeItemQuantity(num);
               }}
               style={{ marginTop: 30 }}
             />
           </View>
           <Text style={styles.textheadings}>
-            {" "}
-            Final Price:{itemQuantity * itemPrice}{" "}
+            Final Price:{itemQuantity * itemPrice}
           </Text>
           <View style={styles.rigthHeaderButtons}>
             <Button
@@ -128,7 +153,7 @@ function ItemDisplay({ route }) {
               onPress={() =>
                 showAlert({
                   id: id,
-                  name: data[id].name,
+                  name: mainData[id].name,
                   price: itemPrice,
                   quantity: itemQuantity,
                 })
