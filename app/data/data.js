@@ -13,11 +13,11 @@ export const data = [
     itemTypes: [
       {
         typeID: 0,
-        varientName: "Soft Copy",
+        varientName: "Copy",
         varientTypes: [
-          { subID: 0, name: "soft Copy", price: 1000 },
-          { subID: 0, name: "Hard Copy", price: 2000 },
-          { subID: 0, name: "Hard Copy (Quality)", price: 3000 },
+          { subID: 0, label: "soft Copy", value: 1000 },
+          { subID: 1, label: "Hard Copy", value: 2000 },
+          { subID: 2, label: "Hard Copy (Quality)", value: 3000 },
         ],
       },
     ],
@@ -36,11 +36,11 @@ export const data = [
     itemTypes: [
       {
         typeID: 0,
-        varientName: "Soft Copy",
+        varientName: "Copy",
         varientTypes: [
-          { subID: 0, name: "soft Copy", price: 1000 },
-          { subID: 0, name: "Hard Copy", price: 2000 },
-          { subID: 0, name: "Hard Copy (Quality)", price: 3000 },
+          { subID: 0, label: "soft Copy", value: 1000 },
+          { subID: 1, label: "Hard Copy", value: 2000 },
+          { subID: 2, label: "Hard Copy (Quality)", value: 3000 },
         ],
       },
     ],
@@ -59,11 +59,11 @@ export const data = [
     itemTypes: [
       {
         typeID: 0,
-        varientName: "Soft Copy",
+        varientName: "Copy",
         varientTypes: [
-          { subID: 0, name: "soft Copy", price: 1000 },
-          { subID: 0, name: "Hard Copy", price: 2000 },
-          { subID: 0, name: "Hard Copy (Quality)", price: 3000 },
+          { subID: 0, label: "soft Copy", value: 1000 },
+          { subID: 1, label: "Hard Copy", value: 2000 },
+          { subID: 2, label: "Hard Copy (Quality)", value: 3000 },
         ],
       },
     ],
@@ -83,11 +83,11 @@ export const data = [
     itemTypes: [
       {
         typeID: 0,
-        varientName: "Soft Copy",
+        varientName: "Copy",
         varientTypes: [
-          { subID: 0, name: "soft Copy", price: 1000 },
-          { subID: 0, name: "Hard Copy", price: 2000 },
-          { subID: 0, name: "Hard Copy (Quality)", price: 3000 },
+          { subID: 0, label: "soft Copy", value: 1000 },
+          { subID: 1, label: "Hard Copy", value: 2000 },
+          { subID: 2, label: "Hard Copy (Quality)", value: 3000 },
         ],
       },
     ],
@@ -106,11 +106,11 @@ export const data = [
     itemTypes: [
       {
         typeID: 0,
-        varientName: "Soft Copy",
+        varientName: "Copy",
         varientTypes: [
-          { subID: 0, name: "soft Copy", price: 1000 },
-          { subID: 0, name: "Hard Copy", price: 2000 },
-          { subID: 0, name: "Hard Copy (Quality)", price: 3000 },
+          { subID: 0, label: "soft Copy", value: 1000 },
+          { subID: 1, label: "Hard Copy", value: 2000 },
+          { subID: 2, label: "Hard Copy (Quality)", value: 3000 },
         ],
       },
     ],
@@ -129,11 +129,20 @@ export const data = [
     itemTypes: [
       {
         typeID: 0,
-        varientName: "Soft Copy",
+        varientName: "Copy",
         varientTypes: [
-          { subID: 0, name: "soft Copy", price: 1000 },
-          { subID: 0, name: "Hard Copy", price: 2000 },
-          { subID: 0, name: "Hard Copy (Quality)", price: 3000 },
+          { subID: 0, label: "soft Copy", value: 1000 },
+          { subID: 1, label: "Hard Copy", value: 2000 },
+          { subID: 2, label: "Hard Copy (Quality)", value: 3000 },
+        ],
+      },
+      {
+        typeID: 1,
+        varientName: "Color",
+        varientTypes: [
+          { subID: 0, label: "White", value: 100 },
+          { subID: 1, label: "Black", value: 200 },
+          { subID: 2, label: "Red", value: 300 },
         ],
       },
     ],
