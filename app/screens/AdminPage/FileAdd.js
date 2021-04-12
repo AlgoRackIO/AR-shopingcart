@@ -32,7 +32,6 @@ const FileAdd = (props) => {
             }
             title="View Data"
           />
-          {/* <ModalDropdown options={["option 1", "option 2"]} /> */}
         </View>
       ),
     });
@@ -50,9 +49,6 @@ const FileAdd = (props) => {
               autoplay
               circleLoop
             />
-            <Text style={styles.itemPrice}>
-              Rs: {mainData.itemTypes[0].varientTypes[0].price}
-            </Text>
             <Text style={styles.itemTitle}>{mainData.name}</Text>
             <View>
               <Text

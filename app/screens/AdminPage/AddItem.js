@@ -37,7 +37,7 @@ const AddItem = ({ navigation }) => {
   };
 
   const getdata = (data) => {
-    setMainData(data.mainData);
+    setMainData({ ...data.mainData, id: itemsData.length });
     navigation.navigate("FileAdd", { mainData: mainData });
   };
 
@@ -128,10 +128,6 @@ const AddItem = ({ navigation }) => {
   useEffect(() => {
     AsyncStorage.getItem("data", (err, result) => {
       setItemData(JSON.parse(result));
-    });
-    setMainData({
-      ...mainData,
-      id: itemsData.length,
     });
   }, []);
 
@@ -254,11 +250,15 @@ const GetInputField = (props) => {
 };
 
 const GetItemTypes = (props) => {
-  const [mainData, setMainData] = useState(props.mainData);
+  const [mainData, setMainData] = useState({
+    ...props.mainData,
+    id: props.mainData.length,
+  });
 
   const showData = () => {
     props.getdata({ mainData });
   };
+  console.log(mainData.id);
 
   useEffect(() => {
     setMainData(props.mainData);
