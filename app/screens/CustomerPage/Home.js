@@ -1,4 +1,4 @@
-import React, { useState, useLayoutEffect } from "react";
+import React, { useState, useLayoutEffect, useEffect } from "react";
 import {
   View,
   Text,
@@ -11,25 +11,20 @@ import {
 import { Card } from "react-native-elements";
 import { Button as ButtonElement } from "react-native-elements";
 import Icon from "react-native-vector-icons/FontAwesome";
-import { data } from "../../data/data";
 import { useDispatch, connect } from "react-redux";
 import { ADD_TO_CART } from "../../redux/CartItem";
 import ModalDropdown from "react-native-modal-dropdown";
 import AsyncStorage from "@react-native-community/async-storage";
 
 const Home = (props) => {
-  AsyncStorage.setItem("data", JSON.stringify(data));
-
   const navigation = props.navigation;
-  const [itemsData, setItemData] = useState([]);
-  AsyncStorage.getItem("data", (err, result) => {
-    setItemData(JSON.parse(result));
-  });
+  const [productsData, setProductsData] = useState([]);
+
   const state = props.state;
   const dispatch = useDispatch();
 
-  const goItemDisplay = (id) => {
-    navigation.navigate("ItemDisplay", { id });
+  const goItemDisplay = (product) => {
+    navigation.navigate("ItemDisplay", { product });
   };
 
   const goMyCart = () => {
@@ -72,64 +67,37 @@ const Home = (props) => {
             }
             title="logout"
           />
-          {/* <ModalDropdown options={["option 1", "option 2"]} /> */}
         </View>
       ),
     });
   }, [state]);
 
+  useEffect(() => {
+    AsyncStorage.getItem("data", (err, result) => {
+      setProductsData(JSON.parse(result));
+    });
+  }, []);
+
   return (
     <View>
       <ScrollView>
-        <View
-          style={{
-            display: "flex",
-            flex: 1,
-            flexDirection: "row",
-            flexWrap: "wrap",
-            justifyContent: "center",
-          }}
-        >
-          {itemsData.map((item, key) => {
+        <View style={styles.mainView}>
+          {productsData.map((item, key) => {
             return (
               <TouchableHighlight
                 underlayColor={"none"}
                 key={key}
-                onPress={() => goItemDisplay(item.id)}
-                style={{
-                  display: "flex",
-                  flex: 1,
-                  flexWrap: "wrap",
-                  flexBasis: "50%",
-                }}
+                onPress={() => goItemDisplay(item)}
+                style={styles.touchableStyle}
               >
-                <Card
-                  key={key}
-                  containerStyle={{
-                    display: "flex",
-                    width: "100%",
-                    marginHorizontal: "3%",
-                    marginVertical: "3%",
-                    padding: 0,
-                    paddingBottom: 20,
-                  }}
-                >
-                  <View
-                    style={{
-                      display: "flex",
-                      flexDirection: "column",
-                      padding: 0,
-                    }}
-                  >
+                <Card key={key} containerStyle={styles.containerStyles}>
+                  <View style={styles.cardView}>
                     <Card.Image
                       source={{
                         uri: item.imgURL[0],
                       }}
                       resizeMode="stretch"
-                      style={{
-                        width: "100%",
-                        height: 200,
-                      }}
+                      style={styles.cardImgStyle}
                     />
                     <View>
                       <Text numberOfLines={2} style={styles.itemTitle}>
@@ -181,15 +149,36 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     margin: 8,
   },
-  CardButton: {
+  mainView: {
+    display: "flex",
     flex: 1,
-    // flexDirection: "row",
-    // justifyContent: "flex-end",
-    margin: 8,
+    flexDirection: "row",
+    flexWrap: "wrap",
+  },
+  touchableStyle: {
+    display: "flex",
+    flex: 1,
+    flexBasis: "50%",
+  },
+  containerStyles: {
+    width: 193,
+    marginHorizontal: 2,
+    marginVertical: 3,
+    padding: 0,
+    paddingBottom: 20,
+  },
+  cardView: {
+    display: "flex",
+    flexDirection: "column",
+    padding: 0,
+  },
+  cardImgStyle: {
+    width: "100%",
+    height: 200,
   },
 });
 
-const mapStateToProps = function (state) {
+const mapStateToProps = (state) => {
   return { state };
 };
 

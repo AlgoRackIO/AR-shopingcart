@@ -14,14 +14,16 @@ import RadioForm from "react-native-simple-radio-button";
 import InputSpinner from "react-native-input-spinner";
 import { useDispatch, connect } from "react-redux";
 import { SliderBox } from "react-native-image-slider-box";
-import AsyncStorage from "@react-native-community/async-storage";
+// import AsyncStorage from "@react-native-community/async-storage";
 
-function ItemDisplay({ route }) {
-  const id = route.params.id;
+const ItemDisplay = ({ route }) => {
+  // const id = route.params.id;
   const dispatch = useDispatch();
-  const [mainData, setMainData] = useState(data);
+  // const [mainData, setMainData] = useState([]);
+  const product = route.params.product;
+
   const [priceList, setPriceList] = useState(
-    mainData[id].itemTypes.map((index) => {
+    product.itemTypes.map((index) => {
       return index.varientTypes[0].value;
     })
   );
@@ -35,7 +37,7 @@ function ItemDisplay({ route }) {
 
   const changeItemQuantity = (item) => {
     setItemQuantity(item);
-    dispatch({ type: CHANGE_ITEM_QUANTITY, payload: item });
+    // dispatch({ type: CHANGE_ITEM_QUANTITY, payload: item });
   };
 
   const addPriceList = (id, price) => {
@@ -73,11 +75,11 @@ function ItemDisplay({ route }) {
     setItemPrice(priceList.reduce((a, b) => a + b, 0));
   }, [priceList]);
 
-  useEffect(() => {
-    AsyncStorage.getItem("data", (err, result) => {
-      setMainData(JSON.parse(result));
-    });
-  }, []);
+  // useEffect(() => {
+  //   AsyncStorage.getItem("data", (err, result) => {
+  //     setMainData(JSON.parse(result));
+  //   });
+  // }, []);
 
   return (
     <View>
@@ -85,7 +87,7 @@ function ItemDisplay({ route }) {
         <Card>
           <View>
             <SliderBox
-              images={mainData[id].imgURL}
+              images={product.imgURL}
               sliderBoxHeight={400}
               parentWidth={330}
               resizeMode="contain"
@@ -93,7 +95,7 @@ function ItemDisplay({ route }) {
               circleLoop
             />
             <Text style={styles.itemPrice}>Rs: {itemPrice}</Text>
-            <Text style={styles.itemTitle}>{mainData[id].name}</Text>
+            <Text style={styles.itemTitle}>{product.name}</Text>
             <View>
               <Text
                 style={{
@@ -104,11 +106,11 @@ function ItemDisplay({ route }) {
               >
                 Description:
               </Text>
-              <Text>{mainData[id].description}</Text>
+              <Text>{product.description}</Text>
             </View>
           </View>
           <View>
-            {mainData[id].itemTypes.map((type, key) => {
+            {product.itemTypes.map((type, key) => {
               return (
                 <View key={key}>
                   <Text style={styles.textheadings}>
@@ -152,8 +154,7 @@ function ItemDisplay({ route }) {
               title="Add to Card"
               onPress={() =>
                 showAlert({
-                  id: id,
-                  name: mainData[id].name,
+                  name: product.name,
                   price: itemPrice,
                   quantity: itemQuantity,
                 })
@@ -164,7 +165,7 @@ function ItemDisplay({ route }) {
       </ScrollView>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   itemTitle: {
@@ -192,7 +193,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = function (state) {
+const mapStateToProps = (state) => {
   return { state };
 };
 export default connect(mapStateToProps)(ItemDisplay);

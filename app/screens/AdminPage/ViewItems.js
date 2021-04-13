@@ -1,4 +1,4 @@
-import React, { useState, useLayoutEffect } from "react";
+import React, { useState, useLayoutEffect, useEffect } from "react";
 import {
   View,
   Text,
@@ -14,15 +14,14 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import { data } from "../../data/data";
 import { useDispatch, connect } from "react-redux";
 import { ADD_TO_CART } from "../../redux/CartItem";
+import AsyncStorage from "@react-native-community/async-storage";
 
 const ViewItems = (props) => {
   const navigation = props.navigation;
-  const itemsData = data;
-  const state = props.state;
-  const dispatch = useDispatch();
+  const [itemsData, setItemData] = useState([]);
 
-  const goEditItems = (id) => {
-    navigation.navigate("EditItems", { id });
+  const goEditItems = (product) => {
+    navigation.navigate("EditItems", { product });
   };
 
   useLayoutEffect(() => {
@@ -34,87 +33,54 @@ const ViewItems = (props) => {
             onPress={() =>
               navigation.reset({
                 index: 0,
-                routes: [{ name: "Users" }],
+                routes: [{ name: "Admin" }],
               })
             }
-            title="logout"
+            title="Home"
           />
         </View>
       ),
     });
-  }, [state]);
+  }, []);
+
+  useEffect(() => {
+    AsyncStorage.getItem("data", (err, result) => {
+      setItemData(JSON.parse(result));
+    });
+  }, []);
 
   return (
     <View>
       <ScrollView>
-        <View
-          style={{
-            display: "flex",
-            flex: 1,
-            flexDirection: "row",
-            flexWrap: "wrap",
-            justifyContent: "center",
-          }}
-        >
+        <View style={styles.mainView}>
           {itemsData.map((item, key) => {
             return (
               <TouchableHighlight
                 underlayColor={"none"}
                 key={key}
-                onPress={() => goEditItems(item.id)}
-                style={{
-                  display: "flex",
-                  flex: 1,
-                  flexWrap: "wrap",
-                  flexBasis: "50%",
-                }}
+                onPress={() => goEditItems(item)}
+                style={styles.touchableStyle}
               >
-                <Card
-                  key={key}
-                  containerStyle={{
-                    display: "flex",
-                    width: "100%",
-                    height: "54%",
-                    marginHorizontal: "3%",
-                    marginVertical: "3%",
-                    padding: 0,
-                    // paddingBottom: 20,
-                  }}
-                >
-                  <View
-                    style={{
-                      display: "flex",
-                      flexDirection: "column",
-                      padding: 0,
-                    }}
-                  >
+                <Card key={key} containerStyle={styles.containerStyles}>
+                  <View style={styles.cardView}>
                     <View>
                       <Card.Image
                         source={{
                           uri: item.imgURL[0],
                         }}
                         resizeMode="stretch"
-                        style={{
-                          width: "100%",
-                          height: 200,
-                        }}
+                        style={styles.cardImgStyle}
                       />
                     </View>
-                    <View>
+                    <View style={{ marginTop: 10 }}>
                       <Text numberOfLines={2} style={styles.itemTitle}>
                         Name: {item.name}
                       </Text>
                       <Text style={styles.itemPrice}>
-                        Rs: {item.types[0].value}
+                        Rs: {item.itemTypes[0].varientTypes[0].value}
                       </Text>
 
-                      <View
-                        style={{
-                          flex: 1,
-                          alignItems: "flex-end",
-                          marginBottom: 35,
-                        }}
-                      >
+                      <View style={styles.editIconStyle}>
                         <ButtonElement
                           icon={
                             <Icon
@@ -140,6 +106,38 @@ const ViewItems = (props) => {
 };
 
 const styles = StyleSheet.create({
+  mainView: {
+    display: "flex",
+    flex: 1,
+    flexDirection: "row",
+    flexWrap: "wrap",
+  },
+  touchableStyle: {
+    display: "flex",
+    flex: 1,
+    flexBasis: "50%",
+  },
+  containerStyles: {
+    width: 193,
+    marginHorizontal: 2,
+    marginVertical: 3,
+    padding: 0,
+    paddingBottom: 20,
+  },
+  cardView: {
+    display: "flex",
+    flexDirection: "column",
+    padding: 0,
+  },
+  cardImgStyle: {
+    width: "100%",
+    height: 200,
+  },
+  editIconStyle: {
+    alignItems: "flex-end",
+    marginBottom: -20,
+    bottom: 5,
+  },
   themColorRed: {
     color: "#f74444",
   },
@@ -148,14 +146,12 @@ const styles = StyleSheet.create({
     height: "20%",
   },
   itemTitle: {
-    // marginTop: "20%",
     fontWeight: "bold",
     fontSize: 17,
     left: 7,
   },
   itemPrice: {
     color: "red",
-    // marginTop: 10,
     fontSize: 15,
     left: 7,
   },
@@ -172,14 +168,9 @@ const styles = StyleSheet.create({
   },
   CardButton: {
     flex: 1,
-    // flexDirection: "row",
-    // justifyContent: "flex-end",
+    justifyContent: "flex-end",
     margin: 8,
   },
 });
 
-const mapStateToProps = function (state) {
-  return { state };
-};
-
-export default connect(mapStateToProps)(ViewItems);
+export default ViewItems;
