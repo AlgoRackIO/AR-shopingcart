@@ -1,17 +1,13 @@
 import React, { useLayoutEffect } from "react";
 import { View, ImageBackground, StyleSheet, Text, Button } from "react-native";
-import Icon from "react-native-vector-icons/FontAwesome";
-import { Button as ButtonElement } from "react-native-elements";
 
 const Admin = ({ navigation }) => {
-  //   const user = props.route.params.user;
-
   const viewItems = () => {
     navigation.navigate("ViewItems");
   };
 
   const addItems = () => {
-    navigation.navigate("AddItem");
+    navigation.navigate("Add Product");
   };
 
   useLayoutEffect(() => {
@@ -36,7 +32,7 @@ const Admin = ({ navigation }) => {
   return (
     <ImageBackground
       style={styles.background}
-      source={require("../../assests/background.jpg")}
+      source={require("../../../assests/background.jpg")}
     >
       <View style={styles.buttonBox}>
         <Text style={styles.textHeader}>Welcome</Text>
