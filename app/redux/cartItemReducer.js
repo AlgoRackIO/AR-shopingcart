@@ -24,7 +24,6 @@ const cartItemsReducer = (state = initialState, action) => {
 
     case CHANGE_ITEM_QUANTITY:
       var index = state.findIndex((index) => index.id == action.payload.id);
-      console.log(index, state[index]);
       state[index] = {
         ...state[index],
         id: action.payload.id,

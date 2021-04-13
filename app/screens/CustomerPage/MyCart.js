@@ -31,13 +31,13 @@ const MyCart = (Props) => {
   };
 
   const changeItemQuantity = (item) => {
-    console.log(item.id);
     dispatch({ type: CHANGE_ITEM_QUANTITY, payload: item });
   };
 
   useLayoutEffect(() => {
+    let tempPay = 0;
     state.forEach((item) => {
-      const tempPay = item.quantity * item.price;
+      tempPay = tempPay + item.quantity * item.price;
       setTotalPayment(tempPay);
     });
   }, [state]);
@@ -90,11 +90,11 @@ const MyCart = (Props) => {
                     onPress={() => deleteItemCard(item.id)}
                   />
                   <View style={{ width: 15 }}></View>
-                  <Button
+                  {/* <Button
                     color="#f74444"
                     title="Next Process"
                     onPress={() => addItemstCard(item.id)}
-                  />
+                  /> */}
                 </View>
               </Card>
             );
@@ -160,7 +160,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = function (state) {
+const mapStateToProps = (state) => {
   return { state };
 };
 
