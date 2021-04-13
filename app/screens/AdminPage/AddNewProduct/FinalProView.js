@@ -1,4 +1,4 @@
-import React, { useLayoutEffect } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import { Card } from "react-native-elements";
 import {
   View,
@@ -8,20 +8,20 @@ import {
   ScrollView,
   Alert,
 } from "react-native";
-import { data } from "../../data/data";
+import { data } from "../../../data/data";
 import { Button as ButtonElement } from "react-native-elements";
 import { SliderBox } from "react-native-image-slider-box";
+import AsyncStorage from "@react-native-community/async-storage";
 
-const FileAdd = (props) => {
+const FinalProView = (props) => {
   const mainData = props.route.params.mainData;
   const navigation = props.navigation;
+  const [productsData, setProductsData] = useState([]);
 
-  console.log(mainData.id);
   useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
-        <View>
-          <View style={{ width: 15, top: 40 }}></View>
+        <View style={{ marginRight: 10 }}>
           <Button
             color="#f74444"
             onPress={() =>
@@ -36,6 +36,19 @@ const FileAdd = (props) => {
       ),
     });
   }, []);
+
+  useEffect(() => {
+    AsyncStorage.getItem("data", (err, result) => {
+      AsyncStorage.setItem(
+        "data",
+        JSON.stringify([
+          ...JSON.parse(result),
+          { ...mainData, id: JSON.parse(result).length },
+        ])
+      );
+    });
+  }, []);
+
   return (
     <View>
       <ScrollView>
@@ -51,15 +64,7 @@ const FileAdd = (props) => {
             />
             <Text style={styles.itemTitle}>{mainData.name}</Text>
             <View>
-              <Text
-                style={{
-                  fontWeight: "bold",
-                  fontSize: 20,
-                  color: "#f74444",
-                }}
-              >
-                Description:
-              </Text>
+              <Text style={styles.descriptionStyle}>Description:</Text>
               <Text>{mainData.description}</Text>
             </View>
           </View>
@@ -84,7 +89,7 @@ const FileAdd = (props) => {
                             <View key={varientKey}>
                               <Text>
                                 <Text>
-                                  {varient.name} (Rs.{varient.price})
+                                  {varient.label} (Rs.{varient.value})
                                 </Text>
                               </Text>
                             </View>
@@ -128,6 +133,11 @@ const styles = StyleSheet.create({
     top: 15,
     fontSize: 15,
   },
+  descriptionStyle: {
+    fontWeight: "bold",
+    fontSize: 20,
+    color: "#f74444",
+  },
 });
 
-export default FileAdd;
+export default FinalProView;
