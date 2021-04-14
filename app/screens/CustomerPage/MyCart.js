@@ -44,7 +44,7 @@ const MyCart = (Props) => {
 
   return (
     <View>
-      <ScrollView>
+      <ScrollView keyboardShouldPersistTaps="handled">
         {state.length ? (
           state.map((item, key) => {
             return (

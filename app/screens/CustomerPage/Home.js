@@ -35,43 +35,6 @@ const Home = (props) => {
     dispatch({ type: ADD_TO_CART, payload: item });
   };
 
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      headerRight: () => (
-        <View style={styles.rigthHeaderButtons}>
-          <Text style={{ fontWeight: "bold" }}>{state.length}</Text>
-
-          <ButtonElement
-            style={{ bottom: 10 }}
-            icon={
-              <Icon
-                name="shopping-cart"
-                size={30}
-                style={{ bottom: 5 }}
-                color="red"
-                type="clear"
-              />
-            }
-            onPress={goMyCart}
-            type="clear"
-          />
-
-          <View style={{ width: 15 }}></View>
-          <Button
-            color="#f74444"
-            onPress={() =>
-              navigation.reset({
-                index: 0,
-                routes: [{ name: "Users" }],
-              })
-            }
-            title="logout"
-          />
-        </View>
-      ),
-    });
-  }, [state]);
-
   useEffect(() => {
     AsyncStorage.getItem("data", (err, result) => {
       setProductsData(JSON.parse(result));
@@ -80,40 +43,70 @@ const Home = (props) => {
 
   return (
     <View>
-      <ScrollView>
-        <View style={styles.mainView}>
-          {productsData.map((item, key) => {
-            return (
-              <TouchableHighlight
-                underlayColor={"none"}
-                key={key}
-                onPress={() => goItemDisplay(item)}
-                style={styles.touchableStyle}
-              >
-                <Card key={key} containerStyle={styles.containerStyles}>
-                  <View style={styles.cardView}>
-                    <Card.Image
-                      source={{
-                        uri: item.imgURL[0],
-                      }}
-                      resizeMode="stretch"
-                      style={styles.cardImgStyle}
-                    />
-                    <View>
-                      <Text numberOfLines={2} style={styles.itemTitle}>
-                        Name: {item.name}
-                      </Text>
-                      <Text style={styles.itemPrice}>
-                        Rs: {item.itemTypes[0].varientTypes[0].value}
-                      </Text>
-                    </View>
-                  </View>
-                </Card>
-              </TouchableHighlight>
-            );
-          })}
+      <View style={{ height: 50 }}>
+        <View style={styles.rigthHeaderButtons}>
+          <Text style={{ fontWeight: "bold" }}>{state.length}</Text>
+          <ButtonElement
+            icon={
+              <Icon name="shopping-cart" size={30} color="red" type="clear" />
+            }
+            onPress={goMyCart}
+            type="clear"
+          />
+          <View style={{ width: 15 }}></View>
+          <ButtonElement
+            titleStyle={{
+              color: "red",
+              fontSize: 20,
+            }}
+            color="red"
+            title="logout"
+            onPress={() =>
+              navigation.reset({
+                index: 0,
+                routes: [{ name: "Users" }],
+              })
+            }
+            type="clear"
+          />
         </View>
-      </ScrollView>
+      </View>
+      <View>
+        <ScrollView keyboardShouldPersistTaps="handled">
+          <View style={styles.mainView}>
+            {productsData.map((item, key) => {
+              return (
+                <TouchableHighlight
+                  underlayColor={"none"}
+                  key={key}
+                  onPress={() => goItemDisplay(item)}
+                  style={styles.touchableStyle}
+                >
+                  <Card key={key} containerStyle={styles.containerStyles}>
+                    <View style={styles.cardView}>
+                      <Card.Image
+                        source={{
+                          uri: item.imgURL[0],
+                        }}
+                        resizeMode="stretch"
+                        style={styles.cardImgStyle}
+                      />
+                      <View>
+                        <Text numberOfLines={2} style={styles.itemTitle}>
+                          Name: {item.name}
+                        </Text>
+                        <Text style={styles.itemPrice}>
+                          Rs: {item.itemTypes[0].varientTypes[0].value}
+                        </Text>
+                      </View>
+                    </View>
+                  </Card>
+                </TouchableHighlight>
+              );
+            })}
+          </View>
+        </ScrollView>
+      </View>
     </View>
   );
 };
@@ -146,8 +139,9 @@ const styles = StyleSheet.create({
   rigthHeaderButtons: {
     flex: 1,
     flexDirection: "row",
-    justifyContent: "center",
-    margin: 8,
+    justifyContent: "flex-end",
+    margin: 6,
+    alignItems: "center",
   },
   mainView: {
     display: "flex",

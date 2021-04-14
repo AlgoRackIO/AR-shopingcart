@@ -83,7 +83,7 @@ const ItemDisplay = ({ route }) => {
 
   return (
     <View>
-      <ScrollView>
+      <ScrollView keyboardShouldPersistTaps="handled">
         <Card>
           <View>
             <SliderBox
