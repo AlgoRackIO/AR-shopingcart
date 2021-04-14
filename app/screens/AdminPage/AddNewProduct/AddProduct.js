@@ -18,7 +18,7 @@ const item_data = {
   ],
 };
 
-const Index = ({ navigation }) => {
+const AddProduct = ({ navigation }) => {
   const [onDetailsPage, SetOnDetailsPage] = useState(true);
   const [itemsData, setItemData] = useState([]);
   const [mainData, setMainData] = useState(item_data);
@@ -41,7 +41,7 @@ const Index = ({ navigation }) => {
   };
 
   const setNameAndDesc = (data) => {
-    SetOnDetailsPage(data.SetOnDetailsPage);
+    SetOnDetailsPage(false);
     setMainData({
       ...mainData,
       name: data.name,
@@ -108,22 +108,6 @@ const Index = ({ navigation }) => {
     });
   };
 
-  const addImg = () => {
-    setMainData({
-      ...mainData,
-      imgURL: [...mainData.imgURL, ""],
-    });
-  };
-
-  const deleteImg = () => {
-    setMainData({
-      ...mainData,
-      imgURL: mainData.imgURL.filter(
-        (index, i) => i != mainData.imgURL.length - 1
-      ),
-    });
-  };
-
   useEffect(() => {
     AsyncStorage.getItem("data", (err, result) => {
       setItemData(JSON.parse(result));
@@ -132,24 +116,19 @@ const Index = ({ navigation }) => {
 
   return (
     <View style={styles.mainView}>
-      <ScrollView>
+      <ScrollView keyboardShouldPersistTaps="handled">
         {onDetailsPage ? (
           <ProductDes
             onSave={setNameAndDesc}
-            name={mainData.name}
-            description={mainData.description}
-            imgURL={mainData.imgURL}
             onDetailsPage={onDetailsPage}
             mainData={mainData}
-            addImg={addImg}
-            deleteImg={deleteImg}
           />
         ) : (
           <View>
             <ProductVerieties
               onSave={setdataTypes}
               mainData={mainData}
-              onDeleteType={deleteType}
+              deleteType={deleteType}
               addNewType={addNewType}
               addNewSubType={addNewSubType}
               backinputField={backinputField}
@@ -170,4 +149,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Index;
+export default AddProduct;

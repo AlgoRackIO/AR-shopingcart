@@ -17,7 +17,7 @@ const ProductVerieties = (props) => {
     setMainData(props.mainData);
   }, [props.mainData]);
   return (
-    <ScrollView>
+    <ScrollView keyboardShouldPersistTaps="handled">
       <View>
         <Text style={styles.typeHeading}>Add items itemTypes</Text>
         {mainData.itemTypes.map((index, key) => {
@@ -32,7 +32,7 @@ const ProductVerieties = (props) => {
                       icon={
                         <Icon name="times" size={20} color="red" type="clear" />
                       }
-                      onPress={() => props.onDeleteType(index.typeID)}
+                      onPress={() => props.deleteType(index.typeID)}
                       type="clear"
                     />
                   </View>
@@ -137,6 +137,7 @@ const ProductVerieties = (props) => {
     </ScrollView>
   );
 };
+
 const styles = StyleSheet.create({
   flexButton: {
     flex: 1,

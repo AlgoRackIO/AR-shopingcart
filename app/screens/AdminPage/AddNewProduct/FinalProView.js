@@ -27,10 +27,10 @@ const FinalProView = (props) => {
             onPress={() =>
               navigation.reset({
                 index: 0,
-                routes: [{ name: "ViewItems" }],
+                routes: [{ name: "Admin" }],
               })
             }
-            title="View Data"
+            title="Home"
           />
         </View>
       ),
@@ -51,7 +51,7 @@ const FinalProView = (props) => {
 
   return (
     <View>
-      <ScrollView>
+      <ScrollView keyboardShouldPersistTaps="handled">
         <Card>
           <View>
             <SliderBox

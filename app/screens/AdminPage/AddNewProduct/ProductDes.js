@@ -5,10 +5,9 @@ import { ScrollView } from "react-native-gesture-handler";
 import Icon from "react-native-vector-icons/FontAwesome";
 
 const ProductDes = (props) => {
-  const [name, setName] = useState(props.name);
-  const [description, SetDescription] = useState(props.description);
-  const [onDetailsPage, SetOnDetailsPage] = useState(props.onDetailsPage);
-  const [imgURL, setImgURl] = useState(props.imgURL);
+  const [name, setName] = useState(props.mainData.name);
+  const [description, SetDescription] = useState(props.mainData.description);
+  const [imgURL, setImgURl] = useState(props.mainData.imgURL);
 
   const goTypePage = () => {
     let checkImg = true;
@@ -16,8 +15,7 @@ const ProductDes = (props) => {
       if (img === "") checkImg = false;
     });
     if (name && description && checkImg) {
-      SetOnDetailsPage(true);
-      props.onSave({ name, description, onDetailsPage, imgURL });
+      props.onSave({ name, description, imgURL });
     } else {
       Alert.alert("Kindly Fill Each box!");
     }
@@ -25,6 +23,10 @@ const ProductDes = (props) => {
 
   const addImg = () => {
     setImgURl([...imgURL, ""]);
+  };
+
+  const deleteImg = () => {
+    setImgURl(imgURL.filter((index, key) => key != imgURL.length - 1));
   };
 
   const changeImgURL = (text, key) => {
@@ -36,12 +38,8 @@ const ProductDes = (props) => {
     );
   };
 
-  useEffect(() => {
-    setImgURl(props.imgURL);
-  }, [props.imgURL]);
-
   return (
-    <ScrollView>
+    <ScrollView keyboardShouldPersistTaps="handled">
       <View style={styles.inputNameMView}>
         <Text style={styles.headText}>Kindly fill product details</Text>
         <View style={styles.inputNameBoxView}>
@@ -73,7 +71,7 @@ const ProductDes = (props) => {
                     icon={
                       <Icon name="plus" size={20} color="red" type="clear" />
                     }
-                    onPress={props.addImg}
+                    onPress={addImg}
                     type="clear"
                   />
                 ) : null}
@@ -82,7 +80,7 @@ const ProductDes = (props) => {
                     icon={
                       <Icon name="times" size={20} color="red" type="clear" />
                     }
-                    onPress={props.deleteImg}
+                    onPress={deleteImg}
                     type="clear"
                   />
                 ) : null}
@@ -100,19 +98,15 @@ const ProductDes = (props) => {
 const styles = StyleSheet.create({
   MainView: {
     width: "91%",
-    flex: 1,
     flexDirection: "row",
-    marginLeft: 38,
   },
   URLView: {
-    flex: 1,
     flexDirection: "row",
     alignItems: "center",
-    width: "80%",
-    justifyContent: "space-between",
+    width: "81%",
   },
   UrlTextBox: {
-    width: 282,
+    width: 285,
     height: 40,
     borderColor: "red",
     borderWidth: 1,
@@ -121,9 +115,7 @@ const styles = StyleSheet.create({
     margin: 2,
   },
   inputNameMView: {
-    flex: 1,
     alignItems: "center",
-    width: "100%",
     marginTop: "10%",
   },
   headText: {
@@ -133,7 +125,6 @@ const styles = StyleSheet.create({
     marginTop: 80,
   },
   inputNameBoxView: {
-    flex: 1,
     alignItems: "center",
     width: "100%",
     marginTop: "10%",
