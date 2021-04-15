@@ -130,7 +130,6 @@ const styles = StyleSheet.create({
     height: 100,
   },
   logoContainer: {
-    // position: "absolute",
     bottom: "10%",
     alignItems: "center",
   },

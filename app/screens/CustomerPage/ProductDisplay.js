@@ -8,18 +8,14 @@ import {
   ScrollView,
   Alert,
 } from "react-native";
-import { data } from "../../data/data";
-import { ADD_TO_CART, CHANGE_ITEM_QUANTITY } from "../../redux/CartItem";
+import { ADD_TO_CART } from "../../redux/CartItem";
 import RadioForm from "react-native-simple-radio-button";
 import InputSpinner from "react-native-input-spinner";
 import { useDispatch, connect } from "react-redux";
 import { SliderBox } from "react-native-image-slider-box";
-// import AsyncStorage from "@react-native-community/async-storage";
 
-const ItemDisplay = ({ route }) => {
-  // const id = route.params.id;
+const ProductDisplay = ({ route }) => {
   const dispatch = useDispatch();
-  // const [mainData, setMainData] = useState([]);
   const product = route.params.product;
 
   const [priceList, setPriceList] = useState(
@@ -37,7 +33,6 @@ const ItemDisplay = ({ route }) => {
 
   const changeItemQuantity = (item) => {
     setItemQuantity(item);
-    // dispatch({ type: CHANGE_ITEM_QUANTITY, payload: item });
   };
 
   const addPriceList = (id, price) => {
@@ -74,12 +69,6 @@ const ItemDisplay = ({ route }) => {
   useEffect(() => {
     setItemPrice(priceList.reduce((a, b) => a + b, 0));
   }, [priceList]);
-
-  // useEffect(() => {
-  //   AsyncStorage.getItem("data", (err, result) => {
-  //     setMainData(JSON.parse(result));
-  //   });
-  // }, []);
 
   return (
     <View>
@@ -184,6 +173,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "flex-end",
     marginTop: 50,
+    marginBottom: 20,
     width: "100%",
   },
   itemPrice: {
@@ -196,4 +186,4 @@ const styles = StyleSheet.create({
 const mapStateToProps = (state) => {
   return { state };
 };
-export default connect(mapStateToProps)(ItemDisplay);
+export default connect(mapStateToProps)(ProductDisplay);

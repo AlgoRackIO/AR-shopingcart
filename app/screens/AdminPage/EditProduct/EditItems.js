@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Text, View } from "react-native";
+import { View } from "react-native";
 import EditProductDes from "./EditProductDes";
 import EditProductVerieties from "./EditProductVerieties";
 
@@ -31,7 +31,6 @@ const EditItems = (props) => {
         />
       ) : (
         <EditProductVerieties
-          // onSave={setdataTypes}
           product={product}
           backinputField={backinputField}
           navigation={props.navigation}

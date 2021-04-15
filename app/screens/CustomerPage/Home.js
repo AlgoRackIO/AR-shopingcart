@@ -4,16 +4,15 @@ import {
   Text,
   StyleSheet,
   ScrollView,
-  Button,
   Alert,
   TouchableHighlight,
 } from "react-native";
 import { Card } from "react-native-elements";
 import { Button as ButtonElement } from "react-native-elements";
-import Icon from "react-native-vector-icons/FontAwesome";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { useDispatch, connect } from "react-redux";
 import { ADD_TO_CART } from "../../redux/CartItem";
-import ModalDropdown from "react-native-modal-dropdown";
+import Icon from "react-native-vector-icons/FontAwesome";
 import AsyncStorage from "@react-native-community/async-storage";
 
 const Home = (props) => {
@@ -23,8 +22,8 @@ const Home = (props) => {
   const state = props.state;
   const dispatch = useDispatch();
 
-  const goItemDisplay = (product) => {
-    navigation.navigate("ItemDisplay", { product });
+  const goProductDisplay = (product) => {
+    navigation.navigate("ProductDisplay", { product });
   };
 
   const goMyCart = () => {
@@ -35,17 +34,37 @@ const Home = (props) => {
     dispatch({ type: ADD_TO_CART, payload: item });
   };
 
-  useEffect(() => {
-    AsyncStorage.getItem("data", (err, result) => {
-      setProductsData(JSON.parse(result));
-    });
-  }, []);
+  const ConfirmLogout = () => {
+    Alert.alert("Are you want to LOGOUT", "", [
+      {
+        text: "Yes",
+        onPress: () =>
+          navigation.reset({
+            index: 0,
+            routes: [{ name: "Users" }],
+          }),
+        style: "default",
+      },
+      {
+        text: "No",
+        style: "cancel",
+      },
+    ]);
+  };
 
-  return (
-    <View>
-      <View style={{ height: 50 }}>
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
         <View style={styles.rigthHeaderButtons}>
-          <Text style={{ fontWeight: "bold" }}>{state.length}</Text>
+          <Text
+            style={{
+              fontWeight: "bold",
+              bottom: 10,
+              left: 3,
+            }}
+          >
+            {state.length}
+          </Text>
           <ButtonElement
             icon={
               <Icon name="shopping-cart" size={30} color="red" type="clear" />
@@ -54,24 +73,26 @@ const Home = (props) => {
             type="clear"
           />
           <View style={{ width: 15 }}></View>
-          <ButtonElement
-            titleStyle={{
-              color: "red",
-              fontSize: 20,
-            }}
+          <FontAwesome
+            name="sign-out"
+            size={30}
             color="red"
-            title="logout"
-            onPress={() =>
-              navigation.reset({
-                index: 0,
-                routes: [{ name: "Users" }],
-              })
-            }
-            type="clear"
+            onPress={ConfirmLogout}
           />
         </View>
-      </View>
-      <View>
+      ),
+    });
+  }, [state]);
+
+  useEffect(() => {
+    AsyncStorage.getItem("data", (err, result) => {
+      setProductsData(JSON.parse(result));
+    });
+  }, []);
+
+  return (
+    <View>
+      <View style={{ height: "100%" }}>
         <ScrollView keyboardShouldPersistTaps="handled">
           <View style={styles.mainView}>
             {productsData.map((item, key) => {
@@ -79,7 +100,7 @@ const Home = (props) => {
                 <TouchableHighlight
                   underlayColor={"none"}
                   key={key}
-                  onPress={() => goItemDisplay(item)}
+                  onPress={() => goProductDisplay(item)}
                   style={styles.touchableStyle}
                 >
                   <Card key={key} containerStyle={styles.containerStyles}>
@@ -148,6 +169,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     flexWrap: "wrap",
+    height: "100%",
   },
   touchableStyle: {
     display: "flex",

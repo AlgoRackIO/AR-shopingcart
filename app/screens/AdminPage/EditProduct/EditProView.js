@@ -1,36 +1,31 @@
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import { Card } from "react-native-elements";
-import {
-  View,
-  Text,
-  Button,
-  StyleSheet,
-  ScrollView,
-  Alert,
-} from "react-native";
-import { data } from "../../../data/data";
-import { Button as ButtonElement } from "react-native-elements";
+import { View, Text, StyleSheet, ScrollView } from "react-native";
 import { SliderBox } from "react-native-image-slider-box";
 import AsyncStorage from "@react-native-community/async-storage";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
 
 const EditProView = (props) => {
   const product = props.route.params.product;
   const navigation = props.navigation;
-  const [productsData, setProductsData] = useState([]);
 
   useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
         <View style={{ marginRight: 10 }}>
-          <Button
-            color="#f74444"
+          <FontAwesome
+            name="home"
+            size={35}
+            color="red"
+            style={{
+              marginRight: 5,
+            }}
             onPress={() =>
               navigation.reset({
                 index: 0,
                 routes: [{ name: "Admin" }],
               })
             }
-            title="Home"
           />
         </View>
       ),
@@ -132,11 +127,6 @@ const styles = StyleSheet.create({
     alignItems: "flex-end",
     marginTop: 50,
     width: "100%",
-  },
-  itemPrice: {
-    color: "red",
-    top: 15,
-    fontSize: 15,
   },
   descriptionStyle: {
     fontWeight: "bold",

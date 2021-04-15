@@ -1,14 +1,6 @@
 import React, { useLayoutEffect, useState } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  Button,
-  TextInput,
-} from "react-native";
+import { View, Text, StyleSheet, ScrollView, Button } from "react-native";
 import { Card } from "react-native-elements";
-import { data } from "../../data/data";
 import { useDispatch, connect } from "react-redux";
 import {
   ADD_TO_CART,
@@ -90,11 +82,6 @@ const MyCart = (Props) => {
                     onPress={() => deleteItemCard(item.id)}
                   />
                   <View style={{ width: 15 }}></View>
-                  {/* <Button
-                    color="#f74444"
-                    title="Next Process"
-                    onPress={() => addItemstCard(item.id)}
-                  /> */}
                 </View>
               </Card>
             );
@@ -119,13 +106,6 @@ const MyCart = (Props) => {
 };
 
 const styles = StyleSheet.create({
-  themColorRed: {
-    color: "#f74444",
-  },
-  image: {
-    width: "60%",
-    height: "20%",
-  },
   input: {
     height: 40,
     margin: 12,

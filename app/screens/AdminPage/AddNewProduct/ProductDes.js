@@ -96,10 +96,6 @@ const ProductDes = (props) => {
   );
 };
 const styles = StyleSheet.create({
-  MainView: {
-    width: "91%",
-    flexDirection: "row",
-  },
   URLView: {
     flexDirection: "row",
     alignItems: "center",

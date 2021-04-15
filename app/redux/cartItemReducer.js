@@ -28,8 +28,6 @@ const cartItemsReducer = (state = initialState, action) => {
         ...state[index],
         id: action.payload.id,
         quantity: action.payload.quantity,
-        // name: action.payload.name,
-        // price: action.payload.price,
       };
       return [...state];
   }

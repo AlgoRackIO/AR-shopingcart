@@ -4,19 +4,13 @@ import {
   Text,
   StyleSheet,
   ScrollView,
-  Button,
-  Alert,
   TouchableHighlight,
 } from "react-native";
 import { Card } from "react-native-elements";
-import { Button as ButtonElement } from "react-native-elements";
-import Icon from "react-native-vector-icons/FontAwesome";
-import { data } from "../../data/data";
-import { useDispatch, connect } from "react-redux";
-import { ADD_TO_CART } from "../../redux/CartItem";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
 import AsyncStorage from "@react-native-community/async-storage";
 
-const ViewItems = (props) => {
+const ViewProducts = (props) => {
   const navigation = props.navigation;
   const [itemsData, setItemData] = useState([]);
 
@@ -28,15 +22,19 @@ const ViewItems = (props) => {
     navigation.setOptions({
       headerRight: () => (
         <View style={styles.rigthHeaderButtons}>
-          <Button
-            color="#f74444"
+          <FontAwesome
+            name="home"
+            size={35}
+            color="red"
+            style={{
+              marginRight: 5,
+            }}
             onPress={() =>
               navigation.reset({
                 index: 0,
                 routes: [{ name: "Admin" }],
               })
             }
-            title="Home"
           />
         </View>
       ),
@@ -81,16 +79,13 @@ const ViewItems = (props) => {
                       </Text>
 
                       <View style={styles.editIconStyle}>
-                        <ButtonElement
-                          icon={
-                            <Icon
-                              name="edit"
-                              size={30}
-                              color="black"
-                              type="clear"
-                            />
-                          }
-                          type="clear"
+                        <FontAwesome
+                          name="edit"
+                          size={35}
+                          color="red"
+                          style={{
+                            marginRight: 5,
+                          }}
                         />
                       </View>
                     </View>
@@ -173,4 +168,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ViewItems;
+export default ViewProducts;

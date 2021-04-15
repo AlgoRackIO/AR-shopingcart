@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Alert, StyleSheet, View, Text, TextInput, Button } from "react-native";
 import { Button as ButtonElement } from "react-native-elements";
 import { ScrollView } from "react-native-gesture-handler";
@@ -39,67 +39,65 @@ const EditProductDes = (props) => {
   };
 
   return (
-    <ScrollView keyboardShouldPersistTaps="handled">
-      <View style={styles.inputNameMView}>
-        <Text style={styles.headText}>Kindly fill product details</Text>
-        <View style={styles.inputNameBoxView}>
-          <TextInput
-            key="Name"
-            style={styles.inputNameDes}
-            placeholder="name"
-            value={name}
-            onChangeText={setName}
-          />
-          <TextInput
-            key="description"
-            style={[styles.inputNameDes, { height: 70 }]}
-            placeholder="description"
-            value={description}
-            onChangeText={SetDescription}
-          />
-          {imgURL.map((img, key) => {
-            return (
-              <View key={key} style={styles.URLView}>
-                <TextInput
-                  style={styles.UrlTextBox}
-                  placeholder="Img URl"
-                  value={imgURL[key]}
-                  onChangeText={(text) => changeImgURL(text, key)}
-                />
-                {key == 0 ? (
-                  <ButtonElement
-                    icon={
-                      <Icon name="plus" size={20} color="red" type="clear" />
-                    }
-                    onPress={addImg}
-                    type="clear"
+    <View>
+      <ScrollView keyboardShouldPersistTaps="handled">
+        <View style={styles.inputNameMView}>
+          <Text style={styles.headText}>Kindly fill product details</Text>
+          <View style={styles.inputNameBoxView}>
+            <TextInput
+              key="Name"
+              style={styles.inputNameDes}
+              placeholder="name"
+              value={name}
+              onChangeText={setName}
+            />
+            <TextInput
+              key="description"
+              style={[styles.inputNameDes, { height: 70 }]}
+              placeholder="description"
+              value={description}
+              onChangeText={SetDescription}
+            />
+            {imgURL.map((img, key) => {
+              return (
+                <View key={key} style={styles.URLView}>
+                  <TextInput
+                    style={styles.UrlTextBox}
+                    placeholder="Img URl"
+                    value={imgURL[key]}
+                    onChangeText={(text) => changeImgURL(text, key)}
                   />
-                ) : null}
-                {key > 0 ? (
-                  <ButtonElement
-                    icon={
-                      <Icon name="times" size={20} color="red" type="clear" />
-                    }
-                    onPress={() => deleteImg(key)}
-                    type="clear"
-                  />
-                ) : null}
-              </View>
-            );
-          })}
-          <View style={styles.inputNameNextB}>
-            <Button title="Next" color="red" onPress={goTypePage} />
+                  {key == 0 ? (
+                    <ButtonElement
+                      icon={
+                        <Icon name="plus" size={20} color="red" type="clear" />
+                      }
+                      onPress={addImg}
+                      type="clear"
+                    />
+                  ) : null}
+                  {key > 0 ? (
+                    <ButtonElement
+                      icon={
+                        <Icon name="times" size={20} color="red" type="clear" />
+                      }
+                      onPress={() => deleteImg(key)}
+                      type="clear"
+                    />
+                  ) : null}
+                </View>
+              );
+            })}
+            <View style={styles.inputNameNextB}>
+              <Button title="Next" color="red" onPress={goTypePage} />
+            </View>
           </View>
         </View>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </View>
   );
 };
 const styles = StyleSheet.create({
-  MainView: {
-    width: "91%",
-    flexDirection: "row",
-  },
   URLView: {
     flexDirection: "row",
     alignItems: "center",
@@ -116,13 +114,12 @@ const styles = StyleSheet.create({
   },
   inputNameMView: {
     alignItems: "center",
-    marginTop: "10%",
   },
   headText: {
     fontWeight: "bold",
     fontSize: 20,
     color: "red",
-    marginTop: 80,
+    marginTop: 30,
   },
   inputNameBoxView: {
     alignItems: "center",
