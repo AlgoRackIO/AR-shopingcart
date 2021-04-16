@@ -14,11 +14,13 @@ import { useDispatch, connect } from "react-redux";
 import { ADD_TO_CART } from "../../redux/CartItem";
 import Icon from "react-native-vector-icons/FontAwesome";
 import AsyncStorage from "@react-native-community/async-storage";
+import auth from "@react-native-firebase/auth";
+import Loading from "../Loader/Loading";
 
 const Home = (props) => {
   const navigation = props.navigation;
   const [productsData, setProductsData] = useState([]);
-
+  const [isLoader, setIsLoader] = useState(false);
   const state = props.state;
   const dispatch = useDispatch();
 
@@ -38,11 +40,18 @@ const Home = (props) => {
     Alert.alert("Are you want to LOGOUT", "", [
       {
         text: "Yes",
-        onPress: () =>
-          navigation.reset({
-            index: 0,
-            routes: [{ name: "Users" }],
-          }),
+        onPress: () => {
+          setIsLoader(true);
+          auth()
+            .signOut()
+            .then(() => {
+              setIsLoader(false);
+              navigation.reset({
+                index: 0,
+                routes: [{ name: "Users" }],
+              });
+            });
+        },
         style: "default",
       },
       {
@@ -128,6 +137,7 @@ const Home = (props) => {
           </View>
         </ScrollView>
       </View>
+      {isLoader ? <Loading /> : null}
     </View>
   );
 };

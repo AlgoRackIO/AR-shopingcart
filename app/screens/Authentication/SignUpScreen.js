@@ -9,7 +9,10 @@ import {
   Button,
   Alert,
   TouchableOpacity,
+  ActivityIndicator,
 } from "react-native";
+import auth from "@react-native-firebase/auth";
+import Loading from "../Loader/Loading";
 
 const SignUpScreen = (props) => {
   const [fName, setFName] = useState("");
@@ -18,10 +21,13 @@ const SignUpScreen = (props) => {
   const [password, setPassword] = useState("");
   const [emailValidation, SetEmailValidation] = useState(true);
   const user = props.route.params.user;
+  const [isLoader, setIsLoader] = useState(false);
 
-  const handleSignUp = () => {
-    if (emailValidation) {
-      if (fName && lName && email && password) {
+  const signUpAuth = (email, password) => {
+    auth()
+      .createUserWithEmailAndPassword(email, password)
+      .then(() => {
+        setIsLoader(false);
         if (user === "customer") {
           props.navigation.reset({
             index: 0,
@@ -35,6 +41,25 @@ const SignUpScreen = (props) => {
             });
           }
         }
+      })
+      .catch((error) => {
+        if (error.code === "auth/email-already-in-use") {
+          Alert.alert("That email address is already in use!");
+        }
+
+        if (error.code === "auth/invalid-email") {
+          Alert.alert("That email address is invalid!");
+        }
+
+        Alert.alert(error);
+      });
+  };
+
+  const handleSignUp = () => {
+    if (emailValidation) {
+      if (fName && lName && email && password) {
+        setIsLoader(true);
+        signUpAuth(email, password);
       } else {
         Alert.alert("Kindly Fill Each box!  ");
       }
@@ -107,6 +132,8 @@ const SignUpScreen = (props) => {
           </TouchableOpacity>
         </View>
       </View>
+
+      {isLoader ? <Loading /> : null}
     </ImageBackground>
   );
 };
