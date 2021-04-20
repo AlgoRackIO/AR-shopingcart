@@ -1,22 +1,29 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import MyCart from "../screens/CustomerPage/MyCart";
-import Users from "../screens/Users/Users";
-import Admin from "../screens/AdminPage/Admin";
-import ViewProducts from "../screens/AdminPage/ViewProducts";
-import EditItems from "../screens/AdminPage/EditProduct/EditItems";
-import AddProduct from "../screens/AdminPage/AddNewProduct/AddProduct";
-import FinalProView from "../screens/AdminPage/AddNewProduct/FinalProView";
-import Home from "../screens/CustomerPage/Home";
-import ProductDisplay from "../screens/CustomerPage/ProductDisplay";
+import Users from "../screens/Users/Index";
+import Admin from "../screens/AdminPage/Index";
+import ViewProducts from "../screens/AdminPage/PDisplay";
+import EditItems from "../screens/AdminPage/EditProduct/Index";
+import AddProduct from "../screens/AdminPage/AddNewProduct/Index";
+import FinalProView from "../screens/AdminPage/AddNewProduct/PView";
+import Home from "../screens/CustomerPage/Index";
+import ProductDisplay from "../screens/CustomerPage/PDisplay";
 import { createStackNavigator } from "@react-navigation/stack";
-import Auth from "../screens/Authentication/Auth";
+import Auth from "../screens/Authentication/Index";
 import SignInScreen from "../screens/Authentication/SignInScreen";
 import SignUpScreen from "./../screens/Authentication/SignUpScreen";
-import EditProView from "../screens/AdminPage/EditProduct/EditProView";
+import EditProView from "../screens/AdminPage/EditProduct/EditPView";
+import AsyncStorage from "@react-native-community/async-storage";
+import data from "./../data/data";
 
 const Navigations = () => {
   const Stack = createStackNavigator();
+
+  useEffect(() => {
+    AsyncStorage.setItem("data", JSON.stringify(data));
+  }, [data]);
+
   return (
     <NavigationContainer>
       <Stack.Navigator
