@@ -3,11 +3,17 @@ import { Alert, StyleSheet, View, Text, TextInput, Button } from "react-native";
 import { Button as ButtonElement } from "react-native-elements";
 import { ScrollView } from "react-native-gesture-handler";
 import Icon from "react-native-vector-icons/FontAwesome";
+import AwesomeAlert from "react-native-awesome-alerts";
 
 const ProductDes = (props) => {
   const [name, setName] = useState(props.mainData.name);
   const [description, SetDescription] = useState(props.mainData.description);
   const [imgURL, setImgURl] = useState(props.mainData.imgURL);
+  const [showAlert, setShowAlert] = useState(false);
+
+  const hideAlert = (show) => {
+    setShowAlert(!show);
+  };
 
   const goTypePage = () => {
     let checkImg = true;
@@ -17,7 +23,7 @@ const ProductDes = (props) => {
     if (name && description && checkImg) {
       props.onSave({ name, description, imgURL });
     } else {
-      Alert.alert("Kindly Fill Each box!");
+      setShowAlert(true);
     }
   };
 
@@ -57,40 +63,48 @@ const ProductDes = (props) => {
             value={description}
             onChangeText={SetDescription}
           />
-          {imgURL.map((img, key) => {
-            return (
-              <View key={key} style={styles.URLView}>
-                <TextInput
-                  style={styles.UrlTextBox}
-                  placeholder="Img URl"
-                  value={imgURL[key]}
-                  onChangeText={(text) => changeImgURL(text, key)}
+          {imgURL.map((img, key) => (
+            <View key={key} style={styles.URLView}>
+              <TextInput
+                style={styles.UrlTextBox}
+                placeholder="Img URl"
+                value={imgURL[key]}
+                onChangeText={(text) => changeImgURL(text, key)}
+              />
+              {key == 0 ? (
+                <ButtonElement
+                  icon={<Icon name="plus" size={20} color="red" type="clear" />}
+                  onPress={addImg}
+                  type="clear"
                 />
-                {key == 0 ? (
-                  <ButtonElement
-                    icon={
-                      <Icon name="plus" size={20} color="red" type="clear" />
-                    }
-                    onPress={addImg}
-                    type="clear"
-                  />
-                ) : null}
-                {key == imgURL.length - 1 && key > 0 ? (
-                  <ButtonElement
-                    icon={
-                      <Icon name="times" size={20} color="red" type="clear" />
-                    }
-                    onPress={deleteImg}
-                    type="clear"
-                  />
-                ) : null}
-              </View>
-            );
-          })}
+              ) : null}
+              {key == imgURL.length - 1 && key > 0 ? (
+                <ButtonElement
+                  icon={
+                    <Icon name="times" size={20} color="red" type="clear" />
+                  }
+                  onPress={deleteImg}
+                  type="clear"
+                />
+              ) : null}
+            </View>
+          ))}
           <View style={styles.inputNameNextB}>
             <Button title="Next" color="red" onPress={goTypePage} />
           </View>
         </View>
+        <AwesomeAlert
+          show={showAlert}
+          showProgress={false}
+          title="Empty Box"
+          message="Kindly fill all the boxes"
+          closeOnTouchOutside={false}
+          closeOnHardwareBackPress={false}
+          showConfirmButton={true}
+          confirmText="OK"
+          confirmButtonColor="#DD6B55"
+          onConfirmPressed={() => hideAlert(true)}
+        />
       </View>
     </ScrollView>
   );
