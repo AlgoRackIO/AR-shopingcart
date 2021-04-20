@@ -9,9 +9,11 @@ import {
   View,
   Button,
   TouchableOpacity,
+  Keyboard,
 } from "react-native";
 import auth from "@react-native-firebase/auth";
 import Loading from "../Loader/Loading";
+import AwesomeAlert from "react-native-awesome-alerts";
 
 const SignInScreen = (props) => {
   const [email, setEmail] = useState("");
@@ -19,52 +21,60 @@ const SignInScreen = (props) => {
   const [emailValidation, SetEmailValidation] = useState(true);
   const user = props.route.params.user;
   const [isLoader, setIsLoader] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
 
-  const signInAuth = (email, password) => {
-    <Loading />;
-    auth()
-      .signInWithEmailAndPassword(email, password)
-      .then(() => {
-        setIsLoader(false);
-        if (user === "customer") {
-          props.navigation.reset({
-            index: 0,
-            routes: [{ name: "Home" }],
-          });
-        } else {
-          {
+  const hideAlert = (show) => {
+    setShowAlert(!show);
+  };
+
+  const signInAuth = async (email, password) => {
+    try {
+      setIsLoader(true);
+      await auth()
+        .signInWithEmailAndPassword(email, password)
+        .then(() => {
+          // global.user =
+          setIsLoader(false);
+          if (user === "customer") {
             props.navigation.reset({
               index: 0,
-              routes: [{ name: "Admin" }],
+              routes: [{ name: "Home" }],
             });
+          } else {
+            {
+              props.navigation.reset({
+                index: 0,
+                routes: [{ name: "Admin" }],
+              });
+            }
           }
-        }
-      })
-      .catch((error) => {
-        if (error.code === "auth/email-already-in-use") {
-          Alert.alert("That email address is already in use!");
-        }
+        });
+    } catch (error) {
+      if (error.code === "auth/invalid-email") {
+        setErrorMsg("That email address is invalid!");
+      }
 
-        if (error.code === "auth/invalid-email") {
-          Alert.alert("That email address is invalid!");
-        }
-
-        Alert.alert(error);
-      });
+      setErrorMsg(error.message);
+      setShowAlert(true);
+    }
   };
 
   const handleSignIn = () => {
+    Keyboard.dismiss();
     if (emailValidation) {
       if (email && password) {
         setIsLoader(true);
         signInAuth(email, password);
       } else {
         setPassword("");
-        Alert.alert("Kindly Fill Each box!  ");
+        setShowAlert(true);
+        setErrorMsg("Kindly Fill Each box!  ");
       }
     } else {
       setPassword("");
-      Alert.alert("Kindly Fill correct email!");
+      setShowAlert(true);
+      setErrorMsg("Kindly Fill correct email!");
     }
   };
 
@@ -122,6 +132,18 @@ const SignInScreen = (props) => {
         </View>
       </View>
       {isLoader ? <Loading /> : null}
+      <AwesomeAlert
+        show={showAlert}
+        showProgress={false}
+        // title="Empty Box"
+        message={errorMsg}
+        closeOnTouchOutside={false}
+        closeOnHardwareBackPress={false}
+        showConfirmButton={true}
+        confirmText="OK"
+        confirmButtonColor="#DD6B55"
+        onConfirmPressed={() => hideAlert(true)}
+      />
     </ImageBackground>
   );
 };

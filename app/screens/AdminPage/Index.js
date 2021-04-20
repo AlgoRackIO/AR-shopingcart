@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   ImageBackground,
@@ -7,9 +7,13 @@ import {
   Button,
   Alert,
 } from "react-native";
+import auth from "@react-native-firebase/auth";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
+import AwesomeAlert from "react-native-awesome-alerts";
 
 const Admin = ({ navigation }) => {
+  const [showAlert, setShowAlert] = useState(false);
+
   const ViewProducts = () => {
     navigation.navigate("ViewProducts");
   };
@@ -18,22 +22,21 @@ const Admin = ({ navigation }) => {
     navigation.navigate("Add Product");
   };
 
-  const ConfirmLogout = () => {
-    Alert.alert("Are you want to LOGOUT", "", [
-      {
-        text: "Yes",
-        onPress: () =>
-          navigation.reset({
-            index: 0,
-            routes: [{ name: "Users" }],
-          }),
-        style: "default",
-      },
-      {
-        text: "No",
-        style: "cancel",
-      },
-    ]);
+  const logOut = () => {
+    // setIsLoader(true);
+    auth()
+      .signOut()
+      .then(() => {
+        setShowAlert(false);
+        navigation.reset({
+          index: 0,
+          routes: [{ name: "Users" }],
+        });
+      });
+  };
+
+  const hideAlert = (show) => {
+    setShowAlert(!show);
   };
 
   return (
@@ -51,7 +54,7 @@ const Admin = ({ navigation }) => {
           name="sign-out"
           size={30}
           color="red"
-          onPress={ConfirmLogout}
+          onPress={() => hideAlert(false)}
         />
       </View>
       <View style={styles.buttonBox}>
@@ -66,6 +69,21 @@ const Admin = ({ navigation }) => {
           </View>
         </View>
       </View>
+      <AwesomeAlert
+        show={showAlert}
+        showProgress={false}
+        title="LOGOUT"
+        message="Are you want to LOGOUT!"
+        closeOnTouchOutside={false}
+        closeOnHardwareBackPress={false}
+        showCancelButton={true}
+        showConfirmButton={true}
+        cancelText="No"
+        confirmText="Yes"
+        confirmButtonColor="#DD6B55"
+        onCancelPressed={() => hideAlert(true)}
+        onConfirmPressed={logOut}
+      />
     </ImageBackground>
   );
 };

@@ -16,14 +16,46 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import AsyncStorage from "@react-native-community/async-storage";
 import auth from "@react-native-firebase/auth";
 import Loading from "../Loader/Loading";
+import { firebase } from "./../../Firebase/config";
+import data from "./../../data/data";
+import AwesomeAlert from "react-native-awesome-alerts";
 
 const Home = (props) => {
   const navigation = props.navigation;
   const [productsData, setProductsData] = useState([]);
-  const [isLoader, setIsLoader] = useState(false);
+  // const [isLoader, setIsLoader] = useState(false);
   const state = props.state;
   const dispatch = useDispatch();
+  // const [showAlert, setShowAlert] = useState(false);
 
+  // const logOut = () => {
+  //   // setIsLoader(true);
+  //   auth()
+  //     .signOut()
+  //     .then(() => {
+  //       setShowAlert(false);
+  //       navigation.reset({
+  //         index: 0,
+  //         routes: [{ name: "Users" }],
+  //       });
+  //     });
+  // };
+
+  // const hideAlert = (show) => {
+  //   setShowAlert(!show);
+  // };
+
+  const logOut = async () => {
+    auth()
+      .signOut()
+      .then(() => {
+        // setIsLoader(false);
+        navigation.reset({
+          index: 0,
+          routes: [{ name: "Users" }],
+        });
+      });
+  };
   const goProductDisplay = (product) => {
     navigation.navigate("ProductDisplay", { product });
   };
@@ -37,28 +69,21 @@ const Home = (props) => {
   };
 
   const ConfirmLogout = () => {
-    Alert.alert("Are you want to LOGOUT", "", [
-      {
-        text: "Yes",
-        onPress: () => {
-          setIsLoader(true);
-          auth()
-            .signOut()
-            .then(() => {
-              setIsLoader(false);
-              navigation.reset({
-                index: 0,
-                routes: [{ name: "Users" }],
-              });
-            });
+    try {
+      Alert.alert("Are you want to LOGOUT", "", [
+        {
+          text: "Yes",
+          onPress: logOut,
+          style: "default",
         },
-        style: "default",
-      },
-      {
-        text: "No",
-        style: "cancel",
-      },
-    ]);
+        {
+          text: "No",
+          style: "cancel",
+        },
+      ]);
+    } catch (error) {
+      Alert.alert(error);
+    }
   };
 
   useLayoutEffect(() => {
@@ -97,7 +122,7 @@ const Home = (props) => {
     AsyncStorage.getItem("data", (err, result) => {
       setProductsData(JSON.parse(result));
     });
-  }, []);
+  }, [productsData]);
 
   return (
     <View>
@@ -137,7 +162,23 @@ const Home = (props) => {
           </View>
         </ScrollView>
       </View>
-      {isLoader ? <Loading /> : null}
+
+      {/* {isLoader ? <Loading /> : null} */}
+      {/* <AwesomeAlert
+        show={showAlert}
+        showProgress={false}
+        title="LOGOUT"
+        message="Are you want to LOGOUT!"
+        closeOnTouchOutside={false}
+        closeOnHardwareBackPress={false}
+        showCancelButton={true}
+        showConfirmButton={true}
+        cancelText="No"
+        confirmText="Yes"
+        confirmButtonColor="#DD6B55"
+        onCancelPressed={() => hideAlert(true)}
+        onConfirmPressed={() => logOut()}
+      /> */}
     </View>
   );
 };

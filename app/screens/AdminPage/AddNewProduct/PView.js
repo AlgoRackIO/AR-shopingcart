@@ -4,10 +4,20 @@ import { View, Text, StyleSheet, ScrollView } from "react-native";
 import { SliderBox } from "react-native-image-slider-box";
 import AsyncStorage from "@react-native-community/async-storage";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
+import firebase from "./../../../Firebase/config";
+import auth from "@react-native-firebase/auth";
+import { Alert } from "react-native";
+import AwesomeAlert from "react-native-awesome-alerts";
 
 const FinalProView = (props) => {
   const mainData = props.route.params.mainData;
   const navigation = props.navigation;
+  const [showAlert, setShowAlert] = useState(false);
+  const [errorMsg, setErrorMsg] = useEffect("");
+
+  const hideAlert = (show) => {
+    setShowAlert(!show);
+  };
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -42,6 +52,20 @@ const FinalProView = (props) => {
         ])
       );
     });
+
+    // try {
+    //   const newReference = firebase
+    //     .database()
+    //     .ref(`/product/${auth().currentUser.uid}`)
+    //     .push();
+    //   // console.log("Auto generated key: ", newReference.key);
+    //   newReference
+    //     .set({ ...mainData, id: 0 })
+    //     .then(() => console.log("Data updated."));
+    // } catch (error) {
+    //   setShowAlert(true);
+    //   setErrorMsg(error);
+    // }
   }, []);
 
   return (
@@ -66,39 +90,47 @@ const FinalProView = (props) => {
           <View>
             <Text style={styles.textheadings}>Categories</Text>
             <View>
-              {mainData.itemTypes.map((index, key) => {
-                return (
-                  <Card key={key}>
+              {mainData.itemTypes.map((index, key) => (
+                <Card key={key}>
+                  <View>
+                    <Text
+                      style={{
+                        color: "red",
+                        fontSize: 20,
+                      }}
+                    >
+                      {index.varientName}
+                    </Text>
                     <View>
-                      <Text
-                        style={{
-                          color: "red",
-                          fontSize: 20,
-                        }}
-                      >
-                        {index.varientName}
-                      </Text>
-                      <View>
-                        {index.varientTypes.map((varient, varientKey) => {
-                          return (
-                            <View key={varientKey}>
-                              <Text>
-                                <Text>
-                                  {varient.label} (Rs.{varient.value})
-                                </Text>
-                              </Text>
-                            </View>
-                          );
-                        })}
-                      </View>
+                      {index.varientTypes.map((varient, varientKey) => (
+                        <View key={varientKey}>
+                          <Text>
+                            <Text>
+                              {varient.label} (Rs.{varient.value})
+                            </Text>
+                          </Text>
+                        </View>
+                      ))}
                     </View>
-                  </Card>
-                );
-              })}
+                  </View>
+                </Card>
+              ))}
             </View>
           </View>
         </Card>
       </ScrollView>
+      <AwesomeAlert
+        show={showAlert}
+        showProgress={false}
+        // title="Empty Bo"
+        message={errorMsg}
+        closeOnTouchOutside={false}
+        closeOnHardwareBackPress={false}
+        showConfirmButton={true}
+        confirmText="OK"
+        confirmButtonColor="#DD6B55"
+        onConfirmPressed={() => hideAlert(true)}
+      />
     </View>
   );
 };

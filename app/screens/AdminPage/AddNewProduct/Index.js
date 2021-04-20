@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { StyleSheet, View, ScrollView } from "react-native";
 import AsyncStorage from "@react-native-community/async-storage";
-import ProductDes from "./ProductDes";
-import ProductVerieties from "./ProductVerieties";
+import ProductDes from "./PDetails";
+import ProductVerieties from "./PVerients";
 
 const item_data = {
   id: 0,

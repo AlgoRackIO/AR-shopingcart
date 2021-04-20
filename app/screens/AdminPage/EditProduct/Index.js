@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { View } from "react-native";
-import EditProductDes from "./EditProductDes";
-import EditProductVerieties from "./EditProductVerieties";
+import EditProductDes from "./EditPDetails";
+import EditProductVerieties from "./EditPVerients";
 
 const EditItems = (props) => {
   const [product, SetProduct] = useState(props.route.params.product);
