@@ -1,6 +1,4 @@
-import AsyncStorage from "@react-native-community/async-storage";
-
-export const data = [
+const data = [
   {
     id: 0,
     name: "Toxic",
@@ -172,6 +170,29 @@ export const data = [
       },
     ],
   },
+  {
+    id: 7,
+    name: "sapiens",
+    imgURL: [
+      "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1420585954l/23692271.jpg",
+      "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1522157426l/19063._SY475_.jpg",
+      "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1382846449l/7144.jpg",
+      "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1422638843l/194746.jpg",
+      "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1522157426l/19063._SY475_.jpg",
+    ],
+    description: "This is the 2nd most wanted book in the world",
+    itemTypes: [
+      {
+        typeID: 0,
+        varientName: "Copy",
+        varientTypes: [
+          { subID: 0, label: "soft Copy", value: 1000 },
+          { subID: 1, label: "Hard Copy", value: 2000 },
+          { subID: 2, label: "Hard Copy (Quality)", value: 3000 },
+        ],
+      },
+    ],
+  },
 ];
 
-AsyncStorage.setItem("data", JSON.stringify(data));
+export default data;
