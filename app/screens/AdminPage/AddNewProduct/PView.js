@@ -13,7 +13,7 @@ const FinalProView = (props) => {
   const mainData = props.route.params.mainData;
   const navigation = props.navigation;
   const [showAlert, setShowAlert] = useState(false);
-  const [errorMsg, setErrorMsg] = useEffect("");
+  const [errorMsg, setErrorMsg] = useState("");
 
   const hideAlert = (show) => {
     setShowAlert(!show);
@@ -43,15 +43,21 @@ const FinalProView = (props) => {
   }, []);
 
   useEffect(() => {
-    AsyncStorage.getItem("data", (err, result) => {
-      AsyncStorage.setItem(
-        "data",
-        JSON.stringify([
-          ...JSON.parse(result),
-          { ...mainData, id: JSON.parse(result).length },
-        ])
-      );
-    });
+    (async function () {
+      try {
+        await AsyncStorage.getItem("data", async (err, result) => {
+          await AsyncStorage.setItem(
+            "data",
+            JSON.stringify([
+              ...JSON.parse(result),
+              { ...mainData, id: JSON.parse(result).length },
+            ])
+          );
+        });
+      } catch (error) {
+        setErrorMsg(error.message);
+      }
+    })();
 
     // try {
     //   const newReference = firebase
@@ -122,7 +128,6 @@ const FinalProView = (props) => {
       <AwesomeAlert
         show={showAlert}
         showProgress={false}
-        // title="Empty Bo"
         message={errorMsg}
         closeOnTouchOutside={false}
         closeOnHardwareBackPress={false}
