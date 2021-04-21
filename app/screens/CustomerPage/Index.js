@@ -46,7 +46,7 @@ const Home = (props) => {
   // };
 
   const logOut = async () => {
-    auth()
+    await auth()
       .signOut()
       .then(() => {
         // setIsLoader(false);
@@ -56,6 +56,7 @@ const Home = (props) => {
         });
       });
   };
+
   const goProductDisplay = (product) => {
     navigation.navigate("ProductDisplay", { product });
   };
