@@ -12,7 +12,7 @@ const EditProView = (props) => {
   const product = props.route.params.product;
   const navigation = props.navigation;
   const [showAlert, setShowAlert] = useState(false);
-  const [errorMsg, setErrorMsg] = useEffect("");
+  const [errorMsg, setErrorMsg] = useState("");
 
   const hideAlert = (show) => {
     setShowAlert(!show);
@@ -42,40 +42,31 @@ const EditProView = (props) => {
   }, []);
 
   useEffect(() => {
-    try {
-      const products = AsyncStorage.getItem("data");
-      if (value) {
-        AsyncStorage.setItem(
-          "data",
-          JSON.stringify(
-            JSON.parse(result).map((index, i) => {
-              if (i == product.id) {
-                return product;
-              } else {
-                return index;
-              }
-            })
-          )
-        );
+    (async function () {
+      try {
+        await AsyncStorage.getItem("data", (error, result) => {
+          if (result) {
+            AsyncStorage.setItem(
+              "data",
+              JSON.stringify(
+                JSON.parse(result).map((index, i) => {
+                  if (i == product.id) {
+                    return product;
+                  } else {
+                    return index;
+                  }
+                })
+              )
+            );
+            if (error) {
+              setErrorMsg(error.message);
+            }
+          }
+        });
+      } catch (error) {
+        setErrorMsg(error.message);
       }
-    } catch (error) {
-      setErrorMsg(error.message);
-    }
-    // AsyncStorage.getItem("data", (err, result) => {
-    //   AsyncStorage.setItem(
-    //     "data",
-    //     JSON.stringify(
-    //       JSON.parse(result).map((index, i) => {
-    //         if (i == product.id) {
-    //           return product;
-    //         } else {
-    //           return index;
-    //         }
-    //       })
-    //     )
-    //   );
-    // });
-
+    })();
     // const newReference = firebase.database().ref(`/product/${}`).push();
     // console.log("Auto generated key: ", newReference.key);
     // newReference.set(data).then(() => console.log("Data updated."));
@@ -136,17 +127,16 @@ const EditProView = (props) => {
       <AwesomeAlert
         show={showAlert}
         showProgress={false}
-        // title="LOGOUT"
         message={errorMsg}
         closeOnTouchOutside={false}
         closeOnHardwareBackPress={false}
-        showCancelButton={true}
+        // showCancelButton={true}
         showConfirmButton={true}
-        cancelText="No"
+        // cancelText="No"
         confirmText="Yes"
         confirmButtonColor="#DD6B55"
-        onCancelPressed={() => hideAlert(true)}
-        onConfirmPressed={logOut}
+        // onCancelPressed={() => hideAlert(true)}
+        onConfirmPressed={() => hideAlert(true)}
       />
     </View>
   );
