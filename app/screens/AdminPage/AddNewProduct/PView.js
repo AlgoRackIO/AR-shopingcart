@@ -8,6 +8,7 @@ import firebase from "./../../../Firebase/config";
 import auth from "@react-native-firebase/auth";
 import { Alert } from "react-native";
 import AwesomeAlert from "react-native-awesome-alerts";
+import database from "@react-native-firebase/database";
 
 const FinalProView = (props) => {
   const mainData = props.route.params.mainData;
@@ -59,19 +60,16 @@ const FinalProView = (props) => {
       }
     })();
 
-    // try {
-    //   const newReference = firebase
-    //     .database()
-    //     .ref(`/product/${auth().currentUser.uid}`)
-    //     .push();
-    //   // console.log("Auto generated key: ", newReference.key);
-    //   newReference
-    //     .set({ ...mainData, id: 0 })
-    //     .then(() => console.log("Data updated."));
-    // } catch (error) {
-    //   setShowAlert(true);
-    //   setErrorMsg(error);
-    // }
+    try {
+      const newReference = database()
+        .ref(`/product/${auth().currentUser.uid}`)
+        .push();
+      // console.log("Auto generated key: ", newReference.key);
+      newReference.set(mainData).then(() => console.log("Data updated."));
+    } catch (error) {
+      setShowAlert(true);
+      setErrorMsg(error);
+    }
   }, []);
 
   return (

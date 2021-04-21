@@ -19,14 +19,16 @@ import Loading from "../Loader/Loading";
 import { firebase } from "./../../Firebase/config";
 import data from "./../../data/data";
 import AwesomeAlert from "react-native-awesome-alerts";
+import database from "@react-native-firebase/database";
 
 const Home = (props) => {
   const navigation = props.navigation;
   const [productsData, setProductsData] = useState([]);
-  // const [isLoader, setIsLoader] = useState(false);
+  const [firebaseData, setFirebaseData] = useState(null);
   const state = props.state;
   const dispatch = useDispatch();
   // const [showAlert, setShowAlert] = useState(false);
+  // const [isLoader, setIsLoader] = useState(false);
 
   // const logOut = () => {
   //   // setIsLoader(true);
@@ -130,6 +132,21 @@ const Home = (props) => {
       }
     })();
   }, [productsData]);
+
+  useEffect(() => {
+    try {
+      database()
+        .ref(`/product`)
+        .on("value", async (snapshot) => {
+          await setFirebaseData(snapshot.val());
+          snapshot.forEach((child) => {
+            console.log("--", child.key);
+          });
+        });
+    } catch (error) {
+      console.log(error.message);
+    }
+  }, []);
 
   return (
     <View>
