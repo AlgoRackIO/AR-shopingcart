@@ -21,7 +21,13 @@ const Navigations = () => {
   const Stack = createStackNavigator();
 
   useEffect(() => {
-    AsyncStorage.setItem("data", JSON.stringify(data));
+    (async function () {
+      try {
+        await AsyncStorage.setItem("data", JSON.stringify(data));
+      } catch (error) {
+        console.log(error.message);
+      }
+    })();
   }, [data]);
 
   return (

@@ -9,10 +9,17 @@ import {
 import { Card } from "react-native-elements";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import AsyncStorage from "@react-native-community/async-storage";
+import AwesomeAlert from "react-native-awesome-alerts";
 
 const ViewProducts = (props) => {
   const navigation = props.navigation;
   const [itemsData, setItemData] = useState([]);
+  const [showAlert, setShowAlert] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
+
+  const hideAlert = (show) => {
+    setShowAlert(!show);
+  };
 
   const goEditItems = (product) => {
     navigation.navigate("EditItems", { product });
@@ -42,9 +49,16 @@ const ViewProducts = (props) => {
   }, []);
 
   useEffect(() => {
-    AsyncStorage.getItem("data", (err, result) => {
-      setItemData(JSON.parse(result));
-    });
+    (async function () {
+      try {
+        await AsyncStorage.getItem("data", (err, result) => {
+          setItemData(JSON.parse(result));
+        });
+      } catch (error) {
+        setShowAlert(true);
+        setErrorMsg(error.message);
+      }
+    })();
   }, []);
 
   return (
@@ -96,6 +110,17 @@ const ViewProducts = (props) => {
           })}
         </View>
       </ScrollView>
+      <AwesomeAlert
+        show={showAlert}
+        showProgress={false}
+        message={errorMsg}
+        closeOnTouchOutside={false}
+        closeOnHardwareBackPress={false}
+        showConfirmButton={true}
+        confirmText="OK"
+        confirmButtonColor="#DD6B55"
+        onConfirmPressed={() => hideAlert(true)}
+      />
     </View>
   );
 };

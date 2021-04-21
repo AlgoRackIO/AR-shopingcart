@@ -3,6 +3,7 @@ import { StyleSheet, View, ScrollView } from "react-native";
 import AsyncStorage from "@react-native-community/async-storage";
 import ProductDes from "./PDetails";
 import ProductVerieties from "./PVerients";
+import AwesomeAlert from "react-native-awesome-alerts";
 
 const item_data = {
   id: 0,
@@ -22,6 +23,12 @@ const AddProduct = ({ navigation }) => {
   const [onDetailsPage, SetOnDetailsPage] = useState(true);
   const [itemsData, setItemData] = useState([]);
   const [mainData, setMainData] = useState(item_data);
+  const [showAlert, setShowAlert] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
+
+  const hideAlert = (show) => {
+    setShowAlert(!show);
+  };
 
   const backinputField = () => {
     SetOnDetailsPage(true);
@@ -109,9 +116,16 @@ const AddProduct = ({ navigation }) => {
   };
 
   useEffect(() => {
-    AsyncStorage.getItem("data", (err, result) => {
-      setItemData(JSON.parse(result));
-    });
+    (async function () {
+      try {
+        await AsyncStorage.getItem("data", (err, result) => {
+          setItemData(JSON.parse(result));
+        });
+      } catch (error) {
+        setShowAlert(true);
+        setErrorMsg(error.message);
+      }
+    })();
   }, []);
 
   return (
@@ -138,6 +152,17 @@ const AddProduct = ({ navigation }) => {
           </View>
         )}
       </ScrollView>
+      <AwesomeAlert
+        show={showAlert}
+        showProgress={false}
+        message={errorMsg}
+        closeOnTouchOutside={false}
+        closeOnHardwareBackPress={false}
+        showConfirmButton={true}
+        confirmText="OK"
+        confirmButtonColor="#DD6B55"
+        onConfirmPressed={() => hideAlert(true)}
+      />
     </View>
   );
 };

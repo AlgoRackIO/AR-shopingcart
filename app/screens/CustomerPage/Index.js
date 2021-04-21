@@ -120,9 +120,15 @@ const Home = (props) => {
   }, [state]);
 
   useEffect(() => {
-    AsyncStorage.getItem("data", (err, result) => {
-      setProductsData(JSON.parse(result));
-    });
+    (async function () {
+      try {
+        await AsyncStorage.getItem("data", (err, result) => {
+          setProductsData(JSON.parse(result));
+        });
+      } catch (error) {
+        console.log(error.message);
+      }
+    })();
   }, [productsData]);
 
   return (

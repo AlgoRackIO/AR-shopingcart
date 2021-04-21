@@ -44,9 +44,9 @@ const EditProView = (props) => {
   useEffect(() => {
     (async function () {
       try {
-        await AsyncStorage.getItem("data", (error, result) => {
+        await AsyncStorage.getItem("data", async (error, result) => {
           if (result) {
-            AsyncStorage.setItem(
+            await AsyncStorage.setItem(
               "data",
               JSON.stringify(
                 JSON.parse(result).map((index, i) => {
@@ -58,12 +58,10 @@ const EditProView = (props) => {
                 })
               )
             );
-            if (error) {
-              setErrorMsg(error.message);
-            }
           }
         });
       } catch (error) {
+        setShowAlert(true);
         setErrorMsg(error.message);
       }
     })();
@@ -130,12 +128,9 @@ const EditProView = (props) => {
         message={errorMsg}
         closeOnTouchOutside={false}
         closeOnHardwareBackPress={false}
-        // showCancelButton={true}
         showConfirmButton={true}
-        // cancelText="No"
-        confirmText="Yes"
+        confirmText="OK"
         confirmButtonColor="#DD6B55"
-        // onCancelPressed={() => hideAlert(true)}
         onConfirmPressed={() => hideAlert(true)}
       />
     </View>
