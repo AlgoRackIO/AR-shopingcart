@@ -68,7 +68,7 @@ const EditProductVerieties = (props) => {
     });
   };
 
-  const showData = (data) => {
+  const showData = () => {
     navigation.reset({
       index: 0,
       routes: [
